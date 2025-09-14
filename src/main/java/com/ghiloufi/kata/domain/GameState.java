@@ -1,6 +1,5 @@
-package com.tennis.model;
+package com.ghiloufi.kata.domain;
 
-/** Enumeration representing the different states of a tennis game */
 public enum GameState {
   IN_PROGRESS,
   DEUCE,

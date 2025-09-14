@@ -1,12 +1,8 @@
-package com.tennis.util;
+package com.ghiloufi.kata.validator;
 
-/** Utility class for validating tennis game inputs */
 public final class InputValidator {
 
-  private InputValidator() {
-    // Private constructor to prevent instantiation
-    throw new UnsupportedOperationException("Utility class cannot be instantiated");
-  }
+  private InputValidator() {}
 
   /**
    * Validates that the input string contains only valid tennis ball characters
@@ -44,7 +40,7 @@ public final class InputValidator {
   }
 
   /**
-   * Sanitizes input by removing any whitespace and converting to uppercase
+   * Sanitizes input by removing any whitespace
    *
    * @param input The raw input string
    * @return Sanitized input string
@@ -54,7 +50,7 @@ public final class InputValidator {
       return null;
     }
 
-    return input.replaceAll("\\s+", "").toUpperCase();
+    return input.replaceAll("\\s+", "");
   }
 
   /**

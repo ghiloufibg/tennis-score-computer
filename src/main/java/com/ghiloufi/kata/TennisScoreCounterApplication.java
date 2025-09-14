@@ -1,10 +1,10 @@
-package com.tennis;
+package com.ghiloufi.kata;
 
-import com.tennis.service.TennisScoreComputer;
+import com.ghiloufi.kata.computer.TennisScoreComputer;
 
-/** Main class to demonstrate the Tennis Score Computer */
-public class Main {
+public class TennisScoreCounterApplication {
   public static void main(String[] args) {
+
     TennisScoreComputer computer = new TennisScoreComputer();
 
     System.out.println("=== Tennis Score Computer Demo ===\n");

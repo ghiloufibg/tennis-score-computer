@@ -87,7 +87,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
-                    <mainClass>com.tennis.Main</mainClass>
+                    <mainClass>com.ghiloufi.kata.TennisScoreCounterApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -98,7 +98,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.tennis.Main</mainClass>
+                            <mainClass>com.ghiloufi.kata.TennisScoreCounterApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -1,6 +1,5 @@
-package com.tennis.model;
+package com.ghiloufi.kata.domain;
 
-/** Represents a tennis player with their current score */
 public class Player {
   private final String name;
   private int points;

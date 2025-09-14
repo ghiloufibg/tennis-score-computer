@@ -1,10 +1,10 @@
-package com.tennis.model;
+package com.ghiloufi.kata.domain;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-/** Unit tests for Player class */
 class PlayerTest {
 
   private Player player;

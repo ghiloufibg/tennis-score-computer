@@ -7,7 +7,7 @@ ABABAA:A:Example from kata description
 AAABBB:DEUCE:Basic deuce situation
 AAABBBAA:A:Win from deuce with advantage
 AAABBBAB:DEUCE:Back to deuce from advantage
-AAABBBABA:B:Advantage switches to B
-AAABBBABAB:B:Multiple advantage switches
+AAABBBABA:ADVANTAGE_A:Advantage switches to A
+AAABBBABAB:DEUCE:Multiple advantage switches
 AABBBAAA:A:Mixed scoring with final win A
 BBAAABBB:B:Mixed scoring with final win B
