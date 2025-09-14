@@ -1,0 +1,13 @@
+# Test cases for Tennis Score Computer
+# Format: input_sequence:expected_winner:description
+
+AAAA:A:Quick win for player A
+BBBB:B:Quick win for player B
+ABABAA:A:Example from kata description
+AAABBB:DEUCE:Basic deuce situation
+AAABBBAA:A:Win from deuce with advantage
+AAABBBAB:DEUCE:Back to deuce from advantage
+AAABBBABA:B:Advantage switches to B
+AAABBBABAB:B:Multiple advantage switches
+AABBBAAA:A:Mixed scoring with final win A
+BBAAABBB:B:Mixed scoring with final win B
