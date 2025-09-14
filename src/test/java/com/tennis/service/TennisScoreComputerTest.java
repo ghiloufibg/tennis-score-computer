@@ -1,11 +1,12 @@
 package com.tennis.service;
 
-import com.tennis.model.GameState;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.tennis.model.GameState;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 /**
  * Comprehensive unit tests for TennisScoreComputer class

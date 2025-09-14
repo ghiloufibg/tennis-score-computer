@@ -3,9 +3,8 @@ package com.tennis.service;
 import com.tennis.model.GameState;
 import com.tennis.model.Player;
 import com.tennis.util.InputValidator;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Main class responsible for computing tennis scores according to tennis rules
@@ -16,8 +15,8 @@ public class TennisScoreComputer {
     
     private final Player playerA;
     private final Player playerB;
-    private GameState gameState;
     private final List<String> scoreHistory;
+    private GameState gameState;
     
     public TennisScoreComputer() {
         this.playerA = new Player("A");
