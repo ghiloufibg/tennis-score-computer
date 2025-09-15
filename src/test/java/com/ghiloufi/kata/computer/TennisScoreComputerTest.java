@@ -1,229 +1,97 @@
 package com.ghiloufi.kata.computer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.ghiloufi.kata.testutil.assertions.Assertions.*;
 
 import com.ghiloufi.kata.domain.GameState;
-import java.util.List;
+import com.ghiloufi.kata.testutil.data.TennisTestCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
+@DisplayName("Tests du calculateur de score de tennis")
 class TennisScoreComputerTest {
 
   private TennisScoreComputer computer;
 
   @BeforeEach
-  void setUp() {
+  void set_up() {
     computer = new TennisScoreComputer();
   }
 
   @Test
-  @DisplayName("Test basic scoring progression")
-  void testBasicScoring() {
-    computer.processGame("ABABAA");
-    List<String> history = computer.getScoreHistory();
+  @DisplayName("Devrait commencer avec l'état initial correct")
+  void should_start_with_correct_initial_state() {
+    assertInitialState(computer);
+  }
 
-    assertEquals(6, history.size());
-    assertEquals("Player A : 15 / Player B : 0", history.get(0));
-    assertEquals("Player A : 15 / Player B : 15", history.get(1));
-    assertEquals("Player A : 30 / Player B : 15", history.get(2));
-    assertEquals("Player A : 30 / Player B : 30", history.get(3));
-    assertEquals("Player A : 40 / Player B : 30", history.get(4));
-    assertEquals("Player A wins the game", history.get(5));
+  @ParameterizedTest
+  @DisplayName("Devrait progresser à travers les scores de base correctement")
+  @MethodSource("com.ghiloufi.kata.testutil.data.DataProvider#scoreProgressionScenarios")
+  void should_progress_through_basic_scores_correctly(String input, String expectedFinalScore) {
+    computer.processGame(input);
+    assertLastScoreMessage(computer, expectedFinalScore);
+  }
+
+  @ParameterizedTest
+  @DisplayName("Devrait gérer les victoires rapides correctement")
+  @MethodSource("com.ghiloufi.kata.testutil.data.DataProvider#quickWinScenarios")
+  void should_handle_quick_wins_correctly(
+      String input, GameState expectedState, String expectedWinMessage, String[] expectedHistory) {
+    computer.processGame(input);
+
+    assertScoreHistory(computer, expectedHistory);
+    assertGameState(computer, expectedState);
+    assertGameEnded(computer);
   }
 
   @Test
-  @DisplayName("Test quick win for player A")
-  void testQuickWinPlayerA() {
-    computer.processGame("AAAA");
-    List<String> history = computer.getScoreHistory();
-
-    assertEquals("Player A : 15 / Player B : 0", history.get(0));
-    assertEquals("Player A : 30 / Player B : 0", history.get(1));
-    assertEquals("Player A : 40 / Player B : 0", history.get(2));
-    assertEquals("Player A wins the game", history.get(3));
-    assertEquals(GameState.GAME_WON_A, computer.getGameState());
-  }
-
-  @Test
-  @DisplayName("Test quick win for player B")
-  void testQuickWinPlayerB() {
-    computer.processGame("BBBB");
-    List<String> history = computer.getScoreHistory();
-
-    assertEquals("Player A : 0 / Player B : 15", history.get(0));
-    assertEquals("Player A : 0 / Player B : 30", history.get(1));
-    assertEquals("Player A : 0 / Player B : 40", history.get(2));
-    assertEquals("Player B wins the game", history.get(3));
-    assertEquals(GameState.GAME_WON_B, computer.getGameState());
-  }
-
-  @Test
-  @DisplayName("Test deuce scenario")
-  void testDeuce() {
+  @DisplayName("Devrait atteindre l'égalité correctement")
+  void should_reach_deuce_correctly() {
     computer.processGame("AAABBB");
-    List<String> history = computer.getScoreHistory();
 
-    assertEquals(6, history.size());
-    assertEquals("Player A : 40 / Player B : 40 (Deuce)", history.get(5));
-    assertEquals(GameState.DEUCE, computer.getGameState());
+    assertGameState(computer, GameState.DEUCE);
+    assertLastScoreMessage(computer, "Player A : 40 / Player B : 40 (Deuce)");
+  }
+
+  @ParameterizedTest
+  @DisplayName("Devrait gérer les scénarios d'avantage correctement")
+  @MethodSource("com.ghiloufi.kata.testutil.data.DataProvider#advantageScenarios")
+  void should_handle_advantage_scenarios_correctly(
+      String input, GameState expectedState, String expectedLastMessage) {
+    computer.processGame(input);
+
+    assertGameState(computer, expectedState);
+    assertLastScoreMessage(computer, expectedLastMessage);
+  }
+
+  @ParameterizedTest
+  @DisplayName("Devrait rejeter les entrées invalides avec des messages d'erreur corrects")
+  @MethodSource("com.ghiloufi.kata.testutil.data.DataProvider#invalidInputScenarios")
+  void should_reject_invalid_input_with_correct_error_messages(
+      String input, String expectedMessage) {
+    assertInvalidInputThrows(computer, input, expectedMessage);
   }
 
   @Test
-  @DisplayName("Test advantage Player A")
-  void testAdvantagePlayerA() {
-    computer.processGame("AAABBBA");
-    List<String> history = computer.getScoreHistory();
-
-    assertEquals(7, history.size());
-    assertEquals("Player A : 40 / Player B : 40 (Advantage Player A)", history.get(6));
-    assertEquals(GameState.ADVANTAGE_A, computer.getGameState());
-  }
-
-  @Test
-  @DisplayName("Test advantage Player B")
-  void testAdvantagePlayerB() {
-    computer.processGame("AAABBBB");
-    List<String> history = computer.getScoreHistory();
-
-    assertEquals(7, history.size());
-    assertEquals("Player A : 40 / Player B : 40 (Advantage Player B)", history.get(6));
-    assertEquals(GameState.ADVANTAGE_B, computer.getGameState());
-  }
-
-  @Test
-  @DisplayName("Test winning from advantage")
-  void testWinFromAdvantage() {
-    computer.processGame("AAABBBAA");
-    List<String> history = computer.getScoreHistory();
-
-    assertEquals(8, history.size());
-    assertEquals("Player A : 40 / Player B : 40 (Deuce)", history.get(5));
-    assertEquals("Player A : 40 / Player B : 40 (Advantage Player A)", history.get(6));
-    assertEquals("Player A wins the game", history.get(7));
-    assertEquals(GameState.GAME_WON_A, computer.getGameState());
-  }
-
-  @Test
-  @DisplayName("Test back to deuce from advantage")
-  void testBackToDeuceFromAdvantage() {
-    computer.processGame("AAABBBAB");
-    List<String> history = computer.getScoreHistory();
-
-    assertEquals(8, history.size());
-    assertEquals("Player A : 40 / Player B : 40 (Deuce)", history.get(5));
-    assertEquals("Player A : 40 / Player B : 40 (Advantage Player A)", history.get(6));
-    assertEquals("Player A : 40 / Player B : 40 (Deuce)", history.get(7));
-    assertEquals(GameState.DEUCE, computer.getGameState());
-  }
-
-  @Test
-  @DisplayName("Test advantage switching")
-  void testAdvantageSwitching() {
-    computer.processGame("AAABBBABB");
-    List<String> history = computer.getScoreHistory();
-
-    assertEquals(9, history.size());
-    assertEquals("Player A : 40 / Player B : 40 (Deuce)", history.get(5));
-    assertEquals("Player A : 40 / Player B : 40 (Advantage Player A)", history.get(6));
-    assertEquals("Player A : 40 / Player B : 40 (Deuce)", history.get(7));
-    assertEquals("Player A : 40 / Player B : 40 (Advantage Player B)", history.get(8));
-    assertEquals(GameState.ADVANTAGE_B, computer.getGameState());
-  }
-
-  @Test
-  @DisplayName("Test long deuce game")
-  void testLongDeuceGame() {
-    computer.processGame("AAABBBABABAB");
-    List<String> history = computer.getScoreHistory();
-
-    // Should have multiple deuce and advantage transitions
-    assertTrue(history.size() > 10);
-    assertEquals("Player A : 40 / Player B : 40 (Deuce)", history.get(history.size() - 1));
-    assertEquals(GameState.DEUCE, computer.getGameState());
-  }
-
-  @Test
-  @DisplayName("Test null input")
-  void testNullInput() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> computer.processGame(null));
-    assertEquals("Input cannot be null", exception.getMessage());
-  }
-
-  @Test
-  @DisplayName("Test empty input")
-  void testEmptyInput() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> computer.processGame(""));
-    assertEquals("Input cannot be empty", exception.getMessage());
-  }
-
-  @Test
-  @DisplayName("Test invalid character input")
-  void testInvalidCharacterInput() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> computer.processGame("AAXBB"));
-    assertEquals(
-        "Invalid character: X at position 2. Only 'A' or 'B' are allowed.", exception.getMessage());
-  }
-
-  @Test
-  @DisplayName("Test mixed case input")
-  void testMixedCaseInput() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> computer.processGame("AaBb"));
-    assertTrue(exception.getMessage().contains("Only 'A' or 'B' are allowed"));
-  }
-
-  @Test
-  @DisplayName("Test game stops after win")
-  void testGameStopsAfterWin() {
-    // Game should stop after AAAA even if there are more characters
+  @DisplayName("Devrait arrêter le jeu après une victoire")
+  void should_stop_game_after_win() {
     computer.processGame("AAAABB");
-    List<String> history = computer.getScoreHistory();
 
-    // Should stop after 4 balls (3 scores + 1 win message)
-    assertEquals(4, history.size());
-    assertEquals("Player A wins the game", history.get(3));
+    assertHistorySize(computer, 4);
+    assertLastScoreMessage(computer, "Player A wins the game");
+    assertGameEnded(computer);
   }
 
-  @Test
-  @DisplayName("Test initial state")
-  void testInitialState() {
-    assertEquals(0, computer.getPlayerA().getPoints());
-    assertEquals(0, computer.getPlayerB().getPoints());
-    assertEquals(GameState.IN_PROGRESS, computer.getGameState());
-    assertTrue(computer.getScoreHistory().isEmpty());
-  }
+  @ParameterizedTest
+  @DisplayName("Devrait gérer les scénarios de jeu complexes correctement")
+  @MethodSource("com.ghiloufi.kata.testutil.data.DataProvider#complexGameScenarios")
+  void should_handle_complex_game_scenarios_correctly(TennisTestCase testCase) {
+    computer.processGame(testCase.input());
 
-  @Test
-  @DisplayName("Test multiple games reset correctly")
-  void testMultipleGamesReset() {
-    // First game
-    computer.processGame("AAAA");
-    assertEquals(GameState.GAME_WON_A, computer.getGameState());
-
-    // Second game - should reset properly
-    computer.processGame("BBBB");
-    assertEquals(GameState.GAME_WON_B, computer.getGameState());
-    assertEquals(0, computer.getPlayerA().getPoints());
-    assertEquals(4, computer.getPlayerB().getPoints());
-  }
-
-  @Test
-  @DisplayName("Test score conversion at different points")
-  void testScoreConversion() {
-    computer.processGame("A");
-    List<String> history = computer.getScoreHistory();
-    assertEquals("Player A : 15 / Player B : 0", history.get(0));
-
-    computer.processGame("AB");
-    history = computer.getScoreHistory();
-    assertEquals("Player A : 15 / Player B : 15", history.get(1));
-
-    computer.processGame("ABB");
-    history = computer.getScoreHistory();
-    assertEquals("Player A : 15 / Player B : 30", history.get(2));
+    assertGameState(computer, testCase.expectedState());
+    assertLastScoreMessage(computer, testCase.expectedLastMessage());
+    assertHistorySize(computer, testCase.expectedHistorySize());
   }
 }
