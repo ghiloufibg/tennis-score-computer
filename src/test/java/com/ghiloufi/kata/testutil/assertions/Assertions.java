@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.ghiloufi.kata.computer.TennisScoreComputer;
 import com.ghiloufi.kata.domain.GameState;
-import java.util.List;
 
 public class Assertions {
 
@@ -12,29 +11,23 @@ public class Assertions {
     assertEquals(expectedState, computer.getGameState(), "Game state should be " + expectedState);
   }
 
-  public static void assertScoreHistory(TennisScoreComputer computer, String[] expectedHistory) {
-    List<String> actualHistory = computer.getScoreHistory();
+  public static void assertScoreHistory(String[] actualHistory, String[] expectedHistory) {
     assertEquals(
-        expectedHistory.length, actualHistory.size(), "History size should match expected");
+        expectedHistory.length, actualHistory.length, "History size should match expected");
 
     for (int i = 0; i < expectedHistory.length; i++) {
-      assertEquals(
-          expectedHistory[i], actualHistory.get(i), "History entry " + i + " should match");
+      assertEquals(expectedHistory[i], actualHistory[i], "History entry " + i + " should match");
     }
   }
 
-  public static void assertLastScoreMessage(TennisScoreComputer computer, String expectedMessage) {
-    List<String> history = computer.getScoreHistory();
-    assertFalse(history.isEmpty(), "Score history should not be empty");
+  public static void assertLastScoreMessage(String[] history, String expectedMessage) {
+    assertNotEquals(0, history.length, "Score history should not be empty");
     assertEquals(
-        expectedMessage,
-        history.get(history.size() - 1),
-        "Last score message should match expected");
+        expectedMessage, history[history.length - 1], "Last score message should match expected");
   }
 
-  public static void assertHistorySize(TennisScoreComputer computer, int expectedSize) {
-    assertEquals(
-        expectedSize, computer.getScoreHistory().size(), "History size should be " + expectedSize);
+  public static void assertHistorySize(String[] history, int expectedSize) {
+    assertEquals(expectedSize, history.length, "History size should be " + expectedSize);
   }
 
   public static void assertPlayerPoints(
@@ -52,17 +45,15 @@ public class Assertions {
   public static void assertInitialState(TennisScoreComputer computer) {
     assertPlayerPoints(computer, 0, 0);
     assertGameState(computer, GameState.IN_PROGRESS);
-    assertTrue(computer.getScoreHistory().isEmpty(), "Initial score history should be empty");
   }
 
-  public static void assertGameEnded(TennisScoreComputer computer) {
+  public static void assertGameEnded(TennisScoreComputer computer, String[] history) {
     GameState state = computer.getGameState();
     assertTrue(
         state == GameState.GAME_WON_A || state == GameState.GAME_WON_B,
         "Game should have ended with a win");
 
-    List<String> history = computer.getScoreHistory();
-    String lastMessage = history.get(history.size() - 1);
+    String lastMessage = history[history.length - 1];
     assertTrue(lastMessage.contains("wins the game"), "Last message should announce winner");
   }
 
@@ -82,12 +73,11 @@ public class Assertions {
     }
   }
 
-  public static void assertGameEndsWithWin(TennisScoreComputer computer) {
+  public static void assertGameEndsWithWin(TennisScoreComputer computer, String[] history) {
     assertTrue(
         computer.getGameState().toString().contains("GAME_WON"), "Game should end with a win");
 
-    List<String> history = computer.getScoreHistory();
-    String lastMessage = history.get(history.size() - 1);
+    String lastMessage = history[history.length - 1];
     assertTrue(lastMessage.contains("wins the game"), "Last message should announce the winner");
   }
 
