@@ -14,6 +14,5 @@ public abstract class TennisTestBase {
   }
 
   protected void onSetUp() {
-    // Override si nécessaire dans les classes filles.
   }
 }

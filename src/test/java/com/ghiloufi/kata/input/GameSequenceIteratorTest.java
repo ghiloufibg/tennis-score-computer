@@ -2,6 +2,7 @@ package com.ghiloufi.kata.input;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.ghiloufi.kata.domain.Point;
 import java.util.NoSuchElementException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,10 +25,10 @@ class GameSequenceIteratorTest {
     GameSequenceIterator iterator = new GameSequenceIterator("AB");
 
     assertTrue(iterator.hasNext());
-    assertEquals('A', iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
 
     assertTrue(iterator.hasNext());
-    assertEquals('B', iterator.next());
+    assertEquals(Point.PLAYER_B, iterator.next());
 
     assertFalse(iterator.hasNext());
   }
@@ -39,7 +40,7 @@ class GameSequenceIteratorTest {
     String result = "";
 
     while (iterator.hasNext()) {
-      result += iterator.next();
+      result += iterator.next().toString();
     }
 
     assertEquals("AAABBBAAA", result);
@@ -96,7 +97,7 @@ class GameSequenceIteratorTest {
     GameSequenceIterator iterator = new GameSequenceIterator("A");
 
     assertTrue(iterator.hasNext());
-    assertEquals('A', iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
     assertFalse(iterator.hasNext());
   }
 
@@ -109,12 +110,12 @@ class GameSequenceIteratorTest {
     assertTrue(iterator.hasNext());
     assertTrue(iterator.hasNext());
 
-    assertEquals('A', iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
 
     assertTrue(iterator.hasNext());
     assertTrue(iterator.hasNext());
 
-    assertEquals('B', iterator.next());
+    assertEquals(Point.PLAYER_B, iterator.next());
 
     assertFalse(iterator.hasNext());
     assertFalse(iterator.hasNext());

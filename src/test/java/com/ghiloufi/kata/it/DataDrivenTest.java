@@ -15,6 +15,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 @DisplayName("Tests pilotés par les données")
 class DataDrivenTest extends TennisTestBase {
 
+  static Stream<TennisTestCase> provideTestCases() {
+    return com.ghiloufi.kata.testutil.data.DataProvider.dataFileTestCases();
+  }
+
   @ParameterizedTest
   @MethodSource("provideTestCases")
   @DisplayName("Devrait traiter tous les scénarios de jeu de tennis avec succès")
@@ -33,9 +37,5 @@ class DataDrivenTest extends TennisTestBase {
   void should_validate_test_case_file_format() {
     var testCases = provideTestCases().toList();
     assertFalse(testCases.isEmpty(), "Should load test cases from file");
-  }
-
-  static Stream<TennisTestCase> provideTestCases() {
-    return com.ghiloufi.kata.testutil.data.DataProvider.dataFileTestCases();
   }
 }

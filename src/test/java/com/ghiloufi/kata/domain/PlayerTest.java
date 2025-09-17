@@ -2,55 +2,60 @@ package com.ghiloufi.kata.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("Tests de la classe Player")
+@DisplayName("Tests du Value Object Player")
 class PlayerTest {
 
-  private Player player;
-
-  @BeforeEach
-  void setUp() {
-    player = new Player("TestPlayer");
-  }
-
   @Test
-  @DisplayName("Devrait créer un joueur avec le nom et les points initialisés")
+  @DisplayName("Devrait créer un joueur avec le nom et score initial")
   void should_create_player() {
-    assertEquals("TestPlayer", player.getName());
-    assertEquals(0, player.getPoints());
+    Player player = Player.withName("TestPlayer");
+
+    assertEquals("TestPlayer", player.name());
+    assertEquals(Score.LOVE_SCORE, player.score());
   }
 
   @Test
-  @DisplayName("Devrait incrémenter les points du joueur")
-  void should_increment_points() {
-    player.incrementPoints();
-    assertEquals(1, player.getPoints());
+  @DisplayName("Devrait marquer des points immutablement")
+  void should_score_points_immutably() {
+    Player player = Player.withName("TestPlayer");
 
-    player.incrementPoints();
-    assertEquals(2, player.getPoints());
+    Player afterFirstPoint = player.scorePoint();
+    assertEquals(Score.FIFTEEN_SCORE, afterFirstPoint.score());
+    assertEquals(Score.LOVE_SCORE, player.score()); // Original unchanged
 
-    player.incrementPoints();
-    assertEquals(3, player.getPoints());
+    Player afterSecondPoint = afterFirstPoint.scorePoint();
+    assertEquals(Score.THIRTY_SCORE, afterSecondPoint.score());
+
+    Player afterThirdPoint = afterSecondPoint.scorePoint();
+    assertEquals(Score.FORTY_SCORE, afterThirdPoint.score());
   }
 
   @Test
-  @DisplayName("Devrait remettre à zéro les points du joueur")
-  void should_reset_player_points() {
-    player.incrementPoints();
-    player.incrementPoints();
-    assertEquals(2, player.getPoints());
+  @DisplayName("Devrait remettre à zéro le score immutablement")
+  void should_reset_score_immutably() {
+    Player player = Player.withName("TestPlayer").scorePoint().scorePoint();
+    assertEquals(Score.THIRTY_SCORE, player.score());
 
-    player.reset();
-    assertEquals(0, player.getPoints());
+    Player resetPlayer = player.reset();
+    assertEquals(Score.LOVE_SCORE, resetPlayer.score());
+    assertEquals(Score.THIRTY_SCORE, player.score()); // Original unchanged
   }
 
   @Test
-  @DisplayName("Devrait convertir le joueur en chaîne de caractères")
-  void should_convert_player_to_string() {
-    String expected = "Player{name='TestPlayer', points=0}";
-    assertEquals(expected, player.toString());
+  @DisplayName("Devrait implémenter equals correctement")
+  void should_implement_equals_correctly() {
+    Player player1 = Player.withName("Alice").scorePoint();
+    Player player2 = Player.withName("Alice").scorePoint();
+    Player player3 = Player.withName("Bob").scorePoint();
+    Player player4 = Player.withName("Alice");
+
+    assertEquals(player1, player2);
+    assertNotEquals(player1, player3);
+    assertNotEquals(player1, player4);
+    assertNotEquals(player1, null);
+    assertNotEquals(player1, "Alice");
   }
 }

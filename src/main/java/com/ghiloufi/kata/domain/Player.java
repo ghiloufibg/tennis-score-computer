@@ -1,32 +1,19 @@
 package com.ghiloufi.kata.domain;
 
-public class Player {
-  private final String name;
-  private int points;
+public record Player(String name, Score score) {
 
-  public Player(String name) {
-    this.name = name;
-    this.points = 0;
+  public static final Player A = new Player("A", Score.LOVE_SCORE);
+  public static final Player B = new Player("B", Score.LOVE_SCORE);
+
+  public static Player withName(String name) {
+    return new Player(name, Score.LOVE_SCORE);
   }
 
-  public String getName() {
-    return name;
+  public Player scorePoint() {
+    return new Player(name, score.increment());
   }
 
-  public int getPoints() {
-    return points;
-  }
-
-  public void incrementPoints() {
-    points++;
-  }
-
-  public void reset() {
-    points = 0;
-  }
-
-  @Override
-  public String toString() {
-    return "Player{" + "name='" + name + '\'' + ", points=" + points + '}';
+  public Player reset() {
+    return new Player(name, Score.LOVE_SCORE);
   }
 }

@@ -2,7 +2,7 @@ package com.ghiloufi.kata.display;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.ghiloufi.kata.domain.Game;
+import com.ghiloufi.kata.domain.TennisGame;
 import com.ghiloufi.kata.domain.GameState;
 import com.ghiloufi.kata.testutil.base.TennisTestBase;
 import com.ghiloufi.kata.testutil.builders.TennisTestBuilder;
@@ -20,7 +20,9 @@ class ScoreboardDisplayTest extends TennisTestBase {
     final var playerA = TennisTestBuilder.playerWithPoints("A", 1);
     final var playerB = TennisTestBuilder.playerWithPoints("B", 0);
 
-    testEnvironment.getDisplay().displayScore(new Game(playerA, playerB, GameState.IN_PROGRESS));
+    testEnvironment
+        .getDisplay()
+        .displayScore(new TennisGame(playerA, playerB, GameState.IN_PROGRESS));
 
     assertEquals(1, testEnvironment.getCapturedOutput().size());
     assertEquals(scoreMessage, testEnvironment.getCapturedOutput().get(0));

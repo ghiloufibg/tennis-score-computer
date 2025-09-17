@@ -2,6 +2,7 @@ package com.ghiloufi.kata.input;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.ghiloufi.kata.domain.Point;
 import java.util.Iterator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ class GameSequenceProviderTest {
   @Test
   @DisplayName("Devrait créer un itérateur depuis une séquence valide")
   void should_create_iterator_from_valid_sequence() {
-    Iterator<Character> iterator = GameSequenceProvider.fromString("AAABB");
+    Iterator<Point> iterator = GameSequenceProvider.fromString("AAABB");
 
     assertNotNull(iterator);
     assertTrue(iterator.hasNext());
@@ -21,34 +22,34 @@ class GameSequenceProviderTest {
   @Test
   @DisplayName("Devrait valider et créer un itérateur pour une séquence simple")
   void should_validate_and_create_iterator_for_simple_sequence() {
-    Iterator<Character> iterator = GameSequenceProvider.fromString("AB");
+    Iterator<Point> iterator = GameSequenceProvider.fromString("AB");
 
-    assertEquals('A', iterator.next());
-    assertEquals('B', iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
+    assertEquals(Point.PLAYER_B, iterator.next());
     assertFalse(iterator.hasNext());
   }
 
   @Test
   @DisplayName("Devrait sanitiser l'entrée en supprimant les espaces")
   void should_sanitize_input_by_removing_spaces() {
-    Iterator<Character> iterator = GameSequenceProvider.fromString("A B A B");
+    Iterator<Point> iterator = GameSequenceProvider.fromString("A B A B");
 
-    assertEquals('A', iterator.next());
-    assertEquals('B', iterator.next());
-    assertEquals('A', iterator.next());
-    assertEquals('B', iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
+    assertEquals(Point.PLAYER_B, iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
+    assertEquals(Point.PLAYER_B, iterator.next());
     assertFalse(iterator.hasNext());
   }
 
   @Test
   @DisplayName("Devrait sanitiser l'entrée en supprimant les tabulations et retours à la ligne")
   void should_sanitize_input_by_removing_tabs_and_newlines() {
-    Iterator<Character> iterator = GameSequenceProvider.fromString("A\tB\nA\rB");
+    Iterator<Point> iterator = GameSequenceProvider.fromString("A\tB\nA\rB");
 
-    assertEquals('A', iterator.next());
-    assertEquals('B', iterator.next());
-    assertEquals('A', iterator.next());
-    assertEquals('B', iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
+    assertEquals(Point.PLAYER_B, iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
+    assertEquals(Point.PLAYER_B, iterator.next());
     assertFalse(iterator.hasNext());
   }
 
@@ -108,7 +109,7 @@ class GameSequenceProviderTest {
 
     assertDoesNotThrow(
         () -> {
-          Iterator<Character> iterator = GameSequenceProvider.fromString(longSequence);
+          Iterator<Point> iterator = GameSequenceProvider.fromString(longSequence);
           assertNotNull(iterator);
           assertTrue(iterator.hasNext());
         });
@@ -130,11 +131,11 @@ class GameSequenceProviderTest {
   @Test
   @DisplayName("Devrait créer un itérateur utilisable pour un jeu complet")
   void should_create_usable_iterator_for_complete_game() {
-    Iterator<Character> iterator = GameSequenceProvider.fromString("AAAA");
+    Iterator<Point> iterator = GameSequenceProvider.fromString("AAAA");
     String result = "";
 
     while (iterator.hasNext()) {
-      result += iterator.next();
+      result += iterator.next().toString();
     }
 
     assertEquals("AAAA", result);
@@ -145,27 +146,26 @@ class GameSequenceProviderTest {
   void should_handle_complex_sequence_with_validation() {
     String complexSequence = "AAABBBABAABBBAAABBBAAA";
 
-    Iterator<Character> iterator = GameSequenceProvider.fromString(complexSequence);
+    Iterator<Point> iterator = GameSequenceProvider.fromString(complexSequence);
 
     assertNotNull(iterator);
     assertTrue(iterator.hasNext());
 
-    // Vérifier quelques premiers éléments
-    assertEquals('A', iterator.next());
-    assertEquals('A', iterator.next());
-    assertEquals('A', iterator.next());
-    assertEquals('B', iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
+    assertEquals(Point.PLAYER_A, iterator.next());
+    assertEquals(Point.PLAYER_B, iterator.next());
   }
 
   @Test
   @DisplayName("Devrait préserver l'ordre des caractères")
   void should_preserve_character_order() {
     String input = "ABBAABAB";
-    Iterator<Character> iterator = GameSequenceProvider.fromString(input);
+    Iterator<Point> iterator = GameSequenceProvider.fromString(input);
 
     StringBuilder result = new StringBuilder();
     while (iterator.hasNext()) {
-      result.append(iterator.next());
+      result.append(iterator.next().toString());
     }
 
     assertEquals(input, result.toString());

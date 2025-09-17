@@ -20,9 +20,9 @@ public class TennisTestBuilder {
   }
 
   public static Player playerWithPoints(String name, int points) {
-    Player player = new Player(name);
+    Player player = Player.withName(name);
     for (int i = 0; i < points; i++) {
-      player.incrementPoints();
+      player = player.scorePoint();
     }
     return player;
   }

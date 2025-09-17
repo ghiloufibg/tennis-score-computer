@@ -35,11 +35,11 @@ public class Assertions {
       TennisScoreComputer computer, int expectedPointsA, int expectedPointsB) {
     assertEquals(
         expectedPointsA,
-        computer.getPlayerA().getPoints(),
+        computer.getPlayerA().score().points(),
         "Player A points should be " + expectedPointsA);
     assertEquals(
         expectedPointsB,
-        computer.getPlayerB().getPoints(),
+        computer.getPlayerB().score().points(),
         "Player B points should be " + expectedPointsB);
   }
 
@@ -60,10 +60,12 @@ public class Assertions {
 
   public static void assertInvalidInputThrows(String input, String expectedMessage) {
     IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> {
-          var testEnv = TennisTestBuilder.createTestEnvironment(input);
-          testEnv.playMatch();
-        });
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              var testEnv = TennisTestBuilder.createTestEnvironment(input);
+              testEnv.playMatch();
+            });
     assertEquals(expectedMessage, exception.getMessage());
   }
 
