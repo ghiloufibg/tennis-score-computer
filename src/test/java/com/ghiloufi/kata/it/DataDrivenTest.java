@@ -4,6 +4,7 @@ import static com.ghiloufi.kata.testutil.assertions.Assertions.assertGameState;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.ghiloufi.kata.testutil.base.TennisTestBase;
+import com.ghiloufi.kata.testutil.builders.TennisTestBuilder;
 import com.ghiloufi.kata.testutil.data.TennisTestCase;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
@@ -21,9 +22,10 @@ class DataDrivenTest extends TennisTestBase {
 
     System.out.println("Testing: " + testCase.description());
 
-    testEnvironment.getComputer().processGame(testCase.input());
+    var testEnv = TennisTestBuilder.createTestEnvironment(testCase.input());
+    testEnv.playMatch();
 
-    assertGameState(testEnvironment.getComputer(), testCase.expectedState());
+    assertGameState(testEnv.getComputer(), testCase.expectedState());
   }
 
   @Test

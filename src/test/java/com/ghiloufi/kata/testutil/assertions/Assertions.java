@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.ghiloufi.kata.computer.TennisScoreComputer;
 import com.ghiloufi.kata.domain.GameState;
+import com.ghiloufi.kata.testutil.builders.TennisTestBuilder;
 
 public class Assertions {
 
@@ -57,10 +58,12 @@ public class Assertions {
     assertTrue(lastMessage.contains("wins the game"), "Last message should announce winner");
   }
 
-  public static void assertInvalidInputThrows(
-      TennisScoreComputer computer, String input, String expectedMessage) {
+  public static void assertInvalidInputThrows(String input, String expectedMessage) {
     IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> computer.processGame(input));
+        assertThrows(IllegalArgumentException.class, () -> {
+          var testEnv = TennisTestBuilder.createTestEnvironment(input);
+          testEnv.playMatch();
+        });
     assertEquals(expectedMessage, exception.getMessage());
   }
 

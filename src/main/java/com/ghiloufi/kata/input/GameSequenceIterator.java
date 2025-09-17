@@ -1,0 +1,34 @@
+package com.ghiloufi.kata.input;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+class GameSequenceIterator implements Iterator<Character> {
+
+  private static final String NO_MORE_ELEMENTS_MESSAGE = "No more characters available";
+
+  private final String input;
+  private int currentIndex;
+
+  GameSequenceIterator(String input) {
+    this.input = input;
+    this.currentIndex = 0;
+  }
+
+  @Override
+  public boolean hasNext() {
+    return input != null && currentIndex < input.length();
+  }
+
+  @Override
+  public Character next() {
+    if (!hasNext()) {
+      throw new NoSuchElementException(NO_MORE_ELEMENTS_MESSAGE);
+    }
+    return input.charAt(currentIndex++);
+  }
+
+  public String getOriginalInput() {
+    return input;
+  }
+}

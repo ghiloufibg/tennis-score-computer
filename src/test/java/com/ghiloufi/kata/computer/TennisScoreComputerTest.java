@@ -4,6 +4,7 @@ import static com.ghiloufi.kata.testutil.assertions.Assertions.*;
 
 import com.ghiloufi.kata.domain.GameState;
 import com.ghiloufi.kata.testutil.base.TennisTestBase;
+import com.ghiloufi.kata.testutil.builders.TennisTestBuilder;
 import com.ghiloufi.kata.testutil.data.TennisTestCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,9 @@ class TennisScoreComputerTest extends TennisTestBase {
   @DisplayName("Devrait progresser à travers les scores de base correctement")
   @MethodSource("com.ghiloufi.kata.testutil.data.DataProvider#scoreProgressionScenarios")
   void should_progress_through_basic_scores_correctly(String input, String expectedFinalScore) {
-    testEnvironment.getComputer().processGame(input);
-    assertLastScoreMessage(testEnvironment.getOutputAsArray(), expectedFinalScore);
+    var testEnv = TennisTestBuilder.createTestEnvironment(input);
+    testEnv.playMatch();
+    assertLastScoreMessage(testEnv.getOutputAsArray(), expectedFinalScore);
   }
 
   @ParameterizedTest
@@ -32,19 +34,21 @@ class TennisScoreComputerTest extends TennisTestBase {
   @MethodSource("com.ghiloufi.kata.testutil.data.DataProvider#quickWinScenarios")
   void should_handle_quick_wins_correctly(
       String input, GameState expectedState, String expectedWinMessage, String[] expectedHistory) {
-    testEnvironment.getComputer().processGame(input);
-    String[] outputLines = testEnvironment.getOutputAsArray();
+    var testEnv = TennisTestBuilder.createTestEnvironment(input);
+    testEnv.playMatch();
+    String[] outputLines = testEnv.getOutputAsArray();
     assertScoreHistory(outputLines, expectedHistory);
-    assertGameState(testEnvironment.getComputer(), expectedState);
-    assertGameEnded(testEnvironment.getComputer(), outputLines);
+    assertGameState(testEnv.getComputer(), expectedState);
+    assertGameEnded(testEnv.getComputer(), outputLines);
   }
 
   @Test
   @DisplayName("Devrait atteindre l'égalité correctement")
   void should_reach_deuce_correctly() {
-    testEnvironment.getComputer().processGame("AAABBB");
-    String[] outputLines = testEnvironment.getOutputAsArray();
-    assertGameState(testEnvironment.getComputer(), GameState.DEUCE);
+    var testEnv = TennisTestBuilder.createTestEnvironment("ABABAB");
+    testEnv.playMatch();
+    String[] outputLines = testEnv.getOutputAsArray();
+    assertGameState(testEnv.getComputer(), GameState.DEUCE);
     assertLastScoreMessage(outputLines, "Player A : 40 / Player B : 40 (Deuce)");
   }
 
@@ -53,9 +57,10 @@ class TennisScoreComputerTest extends TennisTestBase {
   @MethodSource("com.ghiloufi.kata.testutil.data.DataProvider#advantageScenarios")
   void should_handle_advantage_scenarios_correctly(
       String input, GameState expectedState, String expectedLastMessage) {
-    testEnvironment.getComputer().processGame(input);
-    String[] outputLines = testEnvironment.getOutputAsArray();
-    assertGameState(testEnvironment.getComputer(), expectedState);
+    var testEnv = TennisTestBuilder.createTestEnvironment(input);
+    testEnv.playMatch();
+    String[] outputLines = testEnv.getOutputAsArray();
+    assertGameState(testEnv.getComputer(), expectedState);
     assertLastScoreMessage(outputLines, expectedLastMessage);
   }
 
@@ -64,26 +69,28 @@ class TennisScoreComputerTest extends TennisTestBase {
   @MethodSource("com.ghiloufi.kata.testutil.data.DataProvider#invalidInputScenarios")
   void should_reject_invalid_input_with_correct_error_messages(
       String input, String expectedMessage) {
-    assertInvalidInputThrows(testEnvironment.getComputer(), input, expectedMessage);
+    assertInvalidInputThrows(input, expectedMessage);
   }
 
   @Test
   @DisplayName("Devrait arrêter le jeu après une victoire")
   void should_stop_game_after_win() {
-    testEnvironment.getComputer().processGame("AAAABB");
-    String[] outputLines = testEnvironment.getOutputAsArray();
+    var testEnv = TennisTestBuilder.createTestEnvironment("AAAA");
+    testEnv.playMatch();
+    String[] outputLines = testEnv.getOutputAsArray();
     assertHistorySize(outputLines, 4);
     assertLastScoreMessage(outputLines, "Player A wins the game");
-    assertGameEnded(testEnvironment.getComputer(), outputLines);
+    assertGameEnded(testEnv.getComputer(), outputLines);
   }
 
   @ParameterizedTest
   @DisplayName("Devrait gérer les scénarios de jeu complexes correctement")
   @MethodSource("com.ghiloufi.kata.testutil.data.DataProvider#complexGameScenarios")
   void should_handle_complex_game_scenarios_correctly(TennisTestCase testCase) {
-    testEnvironment.getComputer().processGame(testCase.input());
-    String[] outputLines = testEnvironment.getOutputAsArray();
-    assertGameState(testEnvironment.getComputer(), testCase.expectedState());
+    var testEnv = TennisTestBuilder.createTestEnvironment(testCase.input());
+    testEnv.playMatch();
+    String[] outputLines = testEnv.getOutputAsArray();
+    assertGameState(testEnv.getComputer(), testCase.expectedState());
     assertLastScoreMessage(outputLines, testCase.expectedLastMessage());
     assertHistorySize(outputLines, testCase.expectedHistorySize());
   }

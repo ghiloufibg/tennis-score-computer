@@ -1,68 +1,36 @@
 package com.ghiloufi.kata.computer;
 
 import com.ghiloufi.kata.display.ScoreboardDisplay;
-import com.ghiloufi.kata.display.TerminalScoreRenderer;
 import com.ghiloufi.kata.domain.Game;
 import com.ghiloufi.kata.domain.GameState;
 import com.ghiloufi.kata.domain.Player;
-import com.ghiloufi.kata.validator.InputValidator;
+import java.util.Iterator;
 
 public class TennisScoreComputer {
 
-  private static final int MAX_INPUT_LENGTH = 10000;
-
   private final Player playerA;
   private final Player playerB;
-  private final ScoreboardDisplay displayService;
   private GameState gameState;
+  private final ScoreboardDisplay scoreboardDisplay;
 
-  public TennisScoreComputer() {
+  public TennisScoreComputer(final ScoreboardDisplay scoreboardDisplay) {
     this.playerA = new Player("A");
     this.playerB = new Player("B");
     this.gameState = GameState.IN_PROGRESS;
-    this.displayService = new ScoreboardDisplay(System.out::println, new TerminalScoreRenderer());
+    this.scoreboardDisplay = scoreboardDisplay;
   }
 
-  public TennisScoreComputer(ScoreboardDisplay displayService) {
-    this.playerA = new Player("A");
-    this.playerB = new Player("B");
-    this.gameState = GameState.IN_PROGRESS;
-    this.displayService = displayService;
-  }
-
-  /**
-   * Processes a sequence of balls won and displays the score after each ball
-   *
-   * @param balls String containing 'A' or 'B' characters representing balls won
-   * @throws IllegalArgumentException if input is invalid
-   */
-  public void processGame(String balls) {
-    String sanitizedBalls = InputValidator.sanitizeInput(balls);
-    InputValidator.validateGameInput(sanitizedBalls);
-    InputValidator.validateInputLength(sanitizedBalls, MAX_INPUT_LENGTH);
+  public void playMatch(Iterator<Character> gameSequence) {
 
     resetGame();
 
-    for (char ball : sanitizedBalls.toCharArray()) {
-      if (isGameFinished(gameState)) {
-        break;
-      }
-
+    while (gameSequence.hasNext() && !isGameFinished(gameState)) {
+      final char ball = gameSequence.next();
       processBall(ball);
-
-      displayService.displayScore(new Game(playerA, playerB, gameState));
-
-      if (isGameFinished(gameState)) {
-        break;
-      }
+      scoreboardDisplay.displayScore(new Game(playerA, playerB, gameState));
     }
   }
 
-  /**
-   * Processes a single ball won by a player
-   *
-   * @param winner 'A' or 'B' representing the player who won the ball
-   */
   private void processBall(char winner) {
     if (winner == 'A') {
       playerA.incrementPoints();
@@ -73,7 +41,6 @@ public class TennisScoreComputer {
     updateGameState();
   }
 
-  /** Updates the game state based on current points */
   private void updateGameState() {
     final int pointsA = playerA.getPoints();
     final int pointsB = playerB.getPoints();
