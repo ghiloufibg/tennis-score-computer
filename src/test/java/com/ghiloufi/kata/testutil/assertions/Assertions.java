@@ -2,15 +2,9 @@ package com.ghiloufi.kata.testutil.assertions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.ghiloufi.kata.computer.TennisScoreComputer;
-import com.ghiloufi.kata.domain.GameState;
 import com.ghiloufi.kata.testutil.builders.TennisTestBuilder;
 
 public class Assertions {
-
-  public static void assertGameState(TennisScoreComputer computer, GameState expectedState) {
-    assertEquals(expectedState, computer.getGameState(), "Game state should be " + expectedState);
-  }
 
   public static void assertScoreHistory(String[] actualHistory, String[] expectedHistory) {
     assertEquals(
@@ -31,29 +25,14 @@ public class Assertions {
     assertEquals(expectedSize, history.length, "History size should be " + expectedSize);
   }
 
-  public static void assertPlayerPoints(
-      TennisScoreComputer computer, int expectedPointsA, int expectedPointsB) {
-    assertEquals(
-        expectedPointsA,
-        computer.getPlayerA().score().points(),
-        "Player A points should be " + expectedPointsA);
-    assertEquals(
-        expectedPointsB,
-        computer.getPlayerB().score().points(),
-        "Player B points should be " + expectedPointsB);
+  public static void assertInitialState() {
+    var testEnv = TennisTestBuilder.createTestEnvironment("A");
+    testEnv.playMatch();
+    String[] output = testEnv.getOutputAsArray();
+    assertLastScoreMessage(output, "Player A : 15 / Player B : 0");
   }
 
-  public static void assertInitialState(TennisScoreComputer computer) {
-    assertPlayerPoints(computer, 0, 0);
-    assertGameState(computer, GameState.IN_PROGRESS);
-  }
-
-  public static void assertGameEnded(TennisScoreComputer computer, String[] history) {
-    GameState state = computer.getGameState();
-    assertTrue(
-        state == GameState.GAME_WON_A || state == GameState.GAME_WON_B,
-        "Game should have ended with a win");
-
+  public static void assertGameEnded(String[] history) {
     String lastMessage = history[history.length - 1];
     assertTrue(lastMessage.contains("wins the game"), "Last message should announce winner");
   }
@@ -78,17 +57,15 @@ public class Assertions {
     }
   }
 
-  public static void assertGameEndsWithWin(TennisScoreComputer computer, String[] history) {
-    assertTrue(
-        computer.getGameState().toString().contains("GAME_WON"), "Game should end with a win");
-
+  public static void assertGameEndsWithWin(String[] history) {
     String lastMessage = history[history.length - 1];
     assertTrue(lastMessage.contains("wins the game"), "Last message should announce the winner");
   }
 
-  public static void assertGameInProgress(TennisScoreComputer computer) {
-    assertFalse(
-        computer.getGameState().toString().contains("GAME_WON"),
-        "Game should still be in progress");
+  public static void assertGameInProgress(String[] history) {
+    if (history.length > 0) {
+      String lastMessage = history[history.length - 1];
+      assertFalse(lastMessage.contains("wins the game"), "Game should still be in progress");
+    }
   }
 }

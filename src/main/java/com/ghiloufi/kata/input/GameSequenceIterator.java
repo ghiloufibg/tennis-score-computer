@@ -28,8 +28,4 @@ class GameSequenceIterator implements Iterator<Point> {
     }
     return Point.from(input.charAt(currentIndex++));
   }
-
-  public String getOriginalInput() {
-    return input;
-  }
 }

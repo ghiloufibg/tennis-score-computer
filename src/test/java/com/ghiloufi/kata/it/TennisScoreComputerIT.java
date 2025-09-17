@@ -32,7 +32,7 @@ class TennisScoreComputerIT extends TennisTestBase {
     };
 
     assertOutputLinesMatch(expectedLines, outputLines);
-    assertGameEndsWithWin(testEnv.getComputer(), outputLines);
+    assertGameEndsWithWin(outputLines);
   }
 
   @ParameterizedTest
@@ -56,7 +56,7 @@ class TennisScoreComputerIT extends TennisTestBase {
 
     assertTrue(containsDeuce(outputLines), "La sortie devrait contenir au moins un deuce");
     assertTrue(containsAdvantage(outputLines), "La sortie devrait contenir au moins un avantage");
-    assertGameInProgress(testEnv.getComputer());
+    assertGameInProgress(outputLines);
   }
 
   private boolean containsDeuce(String[] outputLines) {

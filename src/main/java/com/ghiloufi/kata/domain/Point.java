@@ -1,12 +1,13 @@
 package com.ghiloufi.kata.domain;
 
+import static com.ghiloufi.kata.display.GameDisplayTemplates.*;
+import static com.ghiloufi.kata.domain.PlayerNotation.*;
+
 import java.util.Objects;
 
 public final class Point {
 
-  private static final char PLAYER_A_CHAR = 'A';
   public static final Point PLAYER_A = new Point(PLAYER_A_CHAR);
-  private static final char PLAYER_B_CHAR = 'B';
   public static final Point PLAYER_B = new Point(PLAYER_B_CHAR);
 
   private final char winner;
@@ -16,23 +17,14 @@ public final class Point {
   }
 
   public static Point from(char winner) {
-    if (winner == PLAYER_A_CHAR) {
-      return PLAYER_A;
+    if (!isValidPlayerChar(winner)) {
+      throw new IllegalArgumentException(String.format(INVALID_PLAYER_ERROR_TEMPLATE, winner));
     }
-    if (winner == PLAYER_B_CHAR) {
-      return PLAYER_B;
-    }
-    throw new IllegalArgumentException(
-        String.format("Invalid player: %c. Only 'A' or 'B' are allowed.", winner));
-  }
-
-  public char getWinner() {
-    return winner;
+    return winner == PLAYER_A_CHAR ? PLAYER_A : PLAYER_B;
   }
 
   public boolean isWonBy(Player player) {
-    return (player == Player.A && winner == PLAYER_A_CHAR)
-        || (player == Player.B && winner == PLAYER_B_CHAR);
+    return winner == getPlayerChar(player);
   }
 
   @Override

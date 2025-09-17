@@ -14,40 +14,40 @@ class ScoreTest {
     Score score = Score.from(2);
 
     assertEquals(2, score.points());
-    assertEquals("30", score.toDisplayString());
+    assertEquals("30", score.toString());
   }
 
   @Test
-  @DisplayName("Devrait utiliser les constantes pour les scores communs")
-  void should_use_constants_for_common_scores() {
-    assertEquals(Score.LOVE_SCORE, Score.from(0));
-    assertEquals(Score.FIFTEEN_SCORE, Score.from(1));
-    assertEquals(Score.THIRTY_SCORE, Score.from(2));
-    assertEquals(Score.FORTY_SCORE, Score.from(3));
+  @DisplayName("Devrait créer des scores corrects avec from()")
+  void should_create_correct_scores_with_from() {
+    assertEquals(Score.from(0), Score.from(0));
+    assertEquals(Score.from(1), Score.from(1));
+    assertEquals(Score.from(2), Score.from(2));
+    assertEquals(Score.from(3), Score.from(3));
   }
 
   @Test
   @DisplayName("Devrait incrémenter le score correctement")
   void should_increment_score_correctly() {
-    Score score = Score.LOVE_SCORE;
+    Score score = Score.from(0);
 
     score = score.increment();
-    assertEquals(Score.FIFTEEN_SCORE, score);
+    assertEquals(Score.from(1), score);
 
     score = score.increment();
-    assertEquals(Score.THIRTY_SCORE, score);
+    assertEquals(Score.from(2), score);
 
     score = score.increment();
-    assertEquals(Score.FORTY_SCORE, score);
+    assertEquals(Score.from(3), score);
   }
 
   @Test
   @DisplayName("Devrait afficher le score tennis correctement")
   void should_display_tennis_score_correctly() {
-    assertEquals("0", Score.LOVE_SCORE.toDisplayString());
-    assertEquals("15", Score.FIFTEEN_SCORE.toDisplayString());
-    assertEquals("30", Score.THIRTY_SCORE.toDisplayString());
-    assertEquals("40", Score.FORTY_SCORE.toDisplayString());
+    assertEquals("0", Score.from(0).toString());
+    assertEquals("15", Score.from(1).toString());
+    assertEquals("30", Score.from(2).toString());
+    assertEquals("40", Score.from(3).toString());
   }
 
   @Test
@@ -56,25 +56,25 @@ class ScoreTest {
     Score score = Score.from(5);
 
     assertEquals(5, score.points());
-    assertEquals("40", score.toDisplayString());
+    assertEquals("40", score.toString());
     assertTrue(score.isAtLeastForty());
   }
 
   @Test
   @DisplayName("Devrait vérifier si le score est 40")
   void should_check_if_score_is_forty() {
-    assertTrue(Score.FORTY_SCORE.isForty());
-    assertFalse(Score.THIRTY_SCORE.isForty());
+    assertTrue(Score.from(3).isForty());
+    assertFalse(Score.from(2).isForty());
     assertFalse(Score.from(4).isForty());
   }
 
   @Test
   @DisplayName("Devrait vérifier si le score est au moins 40")
   void should_check_if_score_is_at_least_forty() {
-    assertTrue(Score.FORTY_SCORE.isAtLeastForty());
+    assertTrue(Score.from(3).isAtLeastForty());
     assertTrue(Score.from(4).isAtLeastForty());
     assertTrue(Score.from(5).isAtLeastForty());
-    assertFalse(Score.THIRTY_SCORE.isAtLeastForty());
+    assertFalse(Score.from(2).isAtLeastForty());
   }
 
   @Test
@@ -102,7 +102,7 @@ class ScoreTest {
   @Test
   @DisplayName("Devrait implémenter toString correctement")
   void should_implement_toString_correctly() {
-    assertEquals("30", Score.THIRTY_SCORE.toString());
-    assertEquals("40", Score.FORTY_SCORE.toString());
+    assertEquals("30", Score.from(2).toString());
+    assertEquals("40", Score.from(3).toString());
   }
 }

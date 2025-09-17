@@ -1,8 +1,6 @@
 package com.ghiloufi.kata.computer;
 
 import com.ghiloufi.kata.display.ScoreboardDisplay;
-import com.ghiloufi.kata.domain.GameState;
-import com.ghiloufi.kata.domain.Player;
 import com.ghiloufi.kata.domain.Point;
 import com.ghiloufi.kata.domain.TennisGame;
 import java.util.Iterator;
@@ -25,21 +23,5 @@ public class TennisScoreComputer {
       tennisGame = tennisGame.scorePoint(point);
       scoreboardDisplay.displayScore(tennisGame);
     }
-  }
-
-  public Player getPlayerA() {
-    return tennisGame.getPlayerA();
-  }
-
-  public Player getPlayerB() {
-    return tennisGame.getPlayerB();
-  }
-
-  public TennisGame getTennisGame() {
-    return tennisGame;
-  }
-
-  public GameState getGameState() {
-    return tennisGame.getGameState();
   }
 }

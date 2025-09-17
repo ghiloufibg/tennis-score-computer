@@ -14,7 +14,7 @@ class PlayerTest {
     Player player = Player.withName("TestPlayer");
 
     assertEquals("TestPlayer", player.name());
-    assertEquals(Score.LOVE_SCORE, player.score());
+    assertEquals(Score.from(0), player.score());
   }
 
   @Test
@@ -23,25 +23,25 @@ class PlayerTest {
     Player player = Player.withName("TestPlayer");
 
     Player afterFirstPoint = player.scorePoint();
-    assertEquals(Score.FIFTEEN_SCORE, afterFirstPoint.score());
-    assertEquals(Score.LOVE_SCORE, player.score()); // Original unchanged
+    assertEquals(Score.from(1), afterFirstPoint.score());
+    assertEquals(Score.from(0), player.score());
 
     Player afterSecondPoint = afterFirstPoint.scorePoint();
-    assertEquals(Score.THIRTY_SCORE, afterSecondPoint.score());
+    assertEquals(Score.from(2), afterSecondPoint.score());
 
     Player afterThirdPoint = afterSecondPoint.scorePoint();
-    assertEquals(Score.FORTY_SCORE, afterThirdPoint.score());
+    assertEquals(Score.from(3), afterThirdPoint.score());
   }
 
   @Test
   @DisplayName("Devrait remettre à zéro le score immutablement")
   void should_reset_score_immutably() {
     Player player = Player.withName("TestPlayer").scorePoint().scorePoint();
-    assertEquals(Score.THIRTY_SCORE, player.score());
+    assertEquals(Score.from(2), player.score());
 
     Player resetPlayer = player.reset();
-    assertEquals(Score.LOVE_SCORE, resetPlayer.score());
-    assertEquals(Score.THIRTY_SCORE, player.score()); // Original unchanged
+    assertEquals(Score.from(0), resetPlayer.score());
+    assertEquals(Score.from(2), player.score());
   }
 
   @Test

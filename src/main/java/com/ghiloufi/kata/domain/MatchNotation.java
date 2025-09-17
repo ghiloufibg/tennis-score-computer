@@ -1,12 +1,13 @@
 package com.ghiloufi.kata.domain;
 
+import static com.ghiloufi.kata.display.GameDisplayTemplates.*;
+import static com.ghiloufi.kata.domain.PlayerNotation.*;
+
 import java.util.Objects;
 
 public final class MatchNotation {
 
   private static final int MAX_LENGTH = 10000;
-  private static final char PLAYER_A = 'A';
-  private static final char PLAYER_B = 'B';
 
   private final String value;
 
@@ -22,35 +23,30 @@ public final class MatchNotation {
 
   private static String sanitize(String notation) {
     if (notation == null) {
-      throw new IllegalArgumentException("Match notation cannot be null");
+      throw new IllegalArgumentException(NOTATION_NULL_ERROR);
     }
     return notation.replaceAll("\\s+", "");
   }
 
   private static void validate(String notation) {
     if (notation.isEmpty()) {
-      throw new IllegalArgumentException("Match notation cannot be empty");
+      throw new IllegalArgumentException(NOTATION_EMPTY_ERROR);
     }
 
     if (notation.length() > MAX_LENGTH) {
       throw new IllegalArgumentException(
-          String.format(
-              "Match notation too long: %d points. Maximum allowed: %d",
-              notation.length(), MAX_LENGTH));
+          String.format(NOTATION_TOO_LONG_ERROR_TEMPLATE, notation.length(), MAX_LENGTH));
     }
 
-    for (int i = 0; i < notation.length(); i++) {
-      char point = notation.charAt(i);
-      if (!isValidPlayer(point)) {
-        throw new IllegalArgumentException(
-            String.format(
-                "Invalid player: %c at position %d. Only 'A' or 'B' are allowed.", point, i));
+    if (!notation.chars().allMatch(c -> isValidPlayerChar((char) c))) {
+      for (int i = 0; i < notation.length(); i++) {
+        char point = notation.charAt(i);
+        if (!isValidPlayerChar(point)) {
+          throw new IllegalArgumentException(
+              String.format(INVALID_PLAYER_AT_POSITION_ERROR_TEMPLATE, point, i));
+        }
       }
     }
-  }
-
-  private static boolean isValidPlayer(char player) {
-    return player == PLAYER_A || player == PLAYER_B;
   }
 
   public String getValue() {

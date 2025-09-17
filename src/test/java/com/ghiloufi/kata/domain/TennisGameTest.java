@@ -2,6 +2,7 @@ package com.ghiloufi.kata.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.ghiloufi.kata.testutil.helpers.GameStateMatchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +16,9 @@ class TennisGameTest {
 
     assertEquals(Player.A.name(), game.getPlayerA().name());
     assertEquals(Player.B.name(), game.getPlayerB().name());
-    assertEquals(GameState.IN_PROGRESS, game.getGameState());
-    assertEquals(Score.LOVE_SCORE, game.getPlayerA().score());
-    assertEquals(Score.LOVE_SCORE, game.getPlayerB().score());
+    assertTrue(GameStateMatchers.isInProgress(game.getGameState()));
+    assertEquals(Score.from(0), game.getPlayerA().score());
+    assertEquals(Score.from(0), game.getPlayerB().score());
   }
 
   @Test
@@ -27,7 +28,7 @@ class TennisGameTest {
 
     assertEquals("Alice", game.getPlayerA().name());
     assertEquals("Bob", game.getPlayerB().name());
-    assertEquals(GameState.IN_PROGRESS, game.getGameState());
+    assertTrue(GameStateMatchers.isInProgress(game.getGameState()));
   }
 
   @Test
@@ -37,9 +38,9 @@ class TennisGameTest {
 
     TennisGame newGame = game.scorePoint(Point.PLAYER_A);
 
-    assertEquals(Score.FIFTEEN_SCORE, newGame.getPlayerA().score());
-    assertEquals(Score.LOVE_SCORE, newGame.getPlayerB().score());
-    assertEquals(GameState.IN_PROGRESS, newGame.getGameState());
+    assertEquals(Score.from(1), newGame.getPlayerA().score());
+    assertEquals(Score.from(0), newGame.getPlayerB().score());
+    assertTrue(GameStateMatchers.isInProgress(newGame.getGameState()));
   }
 
   @Test
@@ -49,9 +50,9 @@ class TennisGameTest {
 
     TennisGame newGame = game.scorePoint(Point.PLAYER_B);
 
-    assertEquals(Score.LOVE_SCORE, newGame.getPlayerA().score());
-    assertEquals(Score.FIFTEEN_SCORE, newGame.getPlayerB().score());
-    assertEquals(GameState.IN_PROGRESS, newGame.getGameState());
+    assertEquals(Score.from(0), newGame.getPlayerA().score());
+    assertEquals(Score.from(1), newGame.getPlayerB().score());
+    assertTrue(GameStateMatchers.isInProgress(newGame.getGameState()));
   }
 
   @Test
@@ -66,7 +67,7 @@ class TennisGameTest {
             .scorePoint(Point.PLAYER_B)
             .scorePoint(Point.PLAYER_B);
 
-    assertEquals(GameState.DEUCE, game.getGameState());
+    assertTrue(GameStateMatchers.isDeuce(game.getGameState()));
     assertEquals(Score.from(3), game.getPlayerA().score());
     assertEquals(Score.from(3), game.getPlayerB().score());
   }
@@ -84,7 +85,7 @@ class TennisGameTest {
             .scorePoint(Point.PLAYER_B)
             .scorePoint(Point.PLAYER_A);
 
-    assertEquals(GameState.ADVANTAGE_A, game.getGameState());
+    assertTrue(GameStateMatchers.isAdvantageA(game.getGameState()));
     assertEquals(Score.from(4), game.getPlayerA().score());
     assertEquals(Score.from(3), game.getPlayerB().score());
   }
@@ -102,7 +103,7 @@ class TennisGameTest {
             .scorePoint(Point.PLAYER_B)
             .scorePoint(Point.PLAYER_B);
 
-    assertEquals(GameState.ADVANTAGE_B, game.getGameState());
+    assertTrue(GameStateMatchers.isAdvantageB(game.getGameState()));
     assertEquals(Score.from(3), game.getPlayerA().score());
     assertEquals(Score.from(4), game.getPlayerB().score());
   }
@@ -117,7 +118,7 @@ class TennisGameTest {
             .scorePoint(Point.PLAYER_A)
             .scorePoint(Point.PLAYER_A);
 
-    assertEquals(GameState.GAME_WON_A, game.getGameState());
+    assertTrue(GameStateMatchers.isGameWonA(game.getGameState()));
     assertTrue(game.isGameFinished());
   }
 
@@ -131,7 +132,7 @@ class TennisGameTest {
             .scorePoint(Point.PLAYER_B)
             .scorePoint(Point.PLAYER_B);
 
-    assertEquals(GameState.GAME_WON_B, game.getGameState());
+    assertTrue(GameStateMatchers.isGameWonB(game.getGameState()));
     assertTrue(game.isGameFinished());
   }
 
@@ -149,7 +150,7 @@ class TennisGameTest {
             .scorePoint(Point.PLAYER_A)
             .scorePoint(Point.PLAYER_A);
 
-    assertEquals(GameState.GAME_WON_A, game.getGameState());
+    assertTrue(GameStateMatchers.isGameWonA(game.getGameState()));
     assertTrue(game.isGameFinished());
   }
 
@@ -179,9 +180,9 @@ class TennisGameTest {
 
     TennisGame resetGame = game.reset();
 
-    assertEquals(Score.LOVE_SCORE, resetGame.getPlayerA().score());
-    assertEquals(Score.LOVE_SCORE, resetGame.getPlayerB().score());
-    assertEquals(GameState.IN_PROGRESS, resetGame.getGameState());
+    assertEquals(Score.from(0), resetGame.getPlayerA().score());
+    assertEquals(Score.from(0), resetGame.getPlayerB().score());
+    assertTrue(GameStateMatchers.isInProgress(resetGame.getGameState()));
     assertFalse(resetGame.isGameFinished());
   }
 
@@ -192,7 +193,7 @@ class TennisGameTest {
     TennisGame newGame = originalGame.scorePoint(Point.PLAYER_A);
 
     assertNotSame(originalGame, newGame);
-    assertEquals(Score.LOVE_SCORE, originalGame.getPlayerA().score());
-    assertEquals(Score.FIFTEEN_SCORE, newGame.getPlayerA().score());
+    assertEquals(Score.from(0), originalGame.getPlayerA().score());
+    assertEquals(Score.from(1), newGame.getPlayerA().score());
   }
 }

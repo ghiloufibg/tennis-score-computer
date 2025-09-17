@@ -3,14 +3,30 @@ package com.ghiloufi.kata.input;
 import com.ghiloufi.kata.domain.MatchNotation;
 import com.ghiloufi.kata.domain.Point;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public final class GameSequenceProvider {
 
   private GameSequenceProvider() {}
 
   public static Iterator<Point> fromString(String raw) {
-    MatchNotation notation = MatchNotation.from(raw);
-    return new GameSequenceIterator(notation.getValue());
-  }
+    String sequence = MatchNotation.from(raw).getValue();
 
+    return new Iterator<>() {
+      private int currentIndex = 0;
+
+      @Override
+      public boolean hasNext() {
+        return currentIndex < sequence.length();
+      }
+
+      @Override
+      public Point next() {
+        if (!hasNext()) {
+          throw new NoSuchElementException("No more points available");
+        }
+        return Point.from(sequence.charAt(currentIndex++));
+      }
+    };
+  }
 }

@@ -1,6 +1,10 @@
 package com.ghiloufi.kata.display;
 
-import com.ghiloufi.kata.domain.Player;
+import static com.ghiloufi.kata.display.GameDisplayTemplates.*;
+
+import com.ghiloufi.kata.domain.AdvantageGameState;
+import com.ghiloufi.kata.domain.DeuceGameState;
+import com.ghiloufi.kata.domain.GameWonState;
 import com.ghiloufi.kata.domain.TennisGame;
 import java.util.function.Function;
 
@@ -8,23 +12,17 @@ public class TerminalScoreRenderer implements Function<TennisGame, String> {
 
   @Override
   public String apply(TennisGame game) {
-    return render(game);
-  }
-
-  private String render(TennisGame game) {
     return switch (game.getGameState()) {
-      case DEUCE -> "Player A : 40 / Player B : 40 (Deuce)";
-      case ADVANTAGE_A -> "Player A : 40 / Player B : 40 (Advantage Player A)";
-      case ADVANTAGE_B -> "Player A : 40 / Player B : 40 (Advantage Player B)";
-      case GAME_WON_A -> "Player A wins the game";
-      case GAME_WON_B -> "Player B wins the game";
-      case IN_PROGRESS -> formatRegularScore(game.getPlayerA(), game.getPlayerB());
-    };
-  }
+      case DeuceGameState __ -> DEUCE_DISPLAY;
 
-  private String formatRegularScore(Player playerA, Player playerB) {
-    return String.format(
-        "Player A : %s / Player B : %s",
-        playerA.score().toDisplayString(), playerB.score().toDisplayString());
+      case AdvantageGameState a -> getAdvantageMessage(a.getPlayerWithAdvantage());
+
+      case GameWonState g -> getGameWonMessage(g.getWinner());
+
+      default ->
+          formatScore(
+              game.getPlayerA().score().toString(),
+              game.getPlayerB().score().toString());
+    };
   }
 }

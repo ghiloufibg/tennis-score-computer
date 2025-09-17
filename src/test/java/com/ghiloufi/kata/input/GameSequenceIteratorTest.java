@@ -16,7 +16,7 @@ class GameSequenceIteratorTest {
     GameSequenceIterator iterator = new GameSequenceIterator("AAABB");
 
     assertNotNull(iterator);
-    assertEquals("AAABB", iterator.getOriginalInput());
+    assertTrue(iterator.hasNext());
   }
 
   @Test
@@ -53,7 +53,6 @@ class GameSequenceIteratorTest {
     GameSequenceIterator iterator = new GameSequenceIterator("");
 
     assertFalse(iterator.hasNext());
-    assertEquals("", iterator.getOriginalInput());
   }
 
   @Test
@@ -62,7 +61,6 @@ class GameSequenceIteratorTest {
     GameSequenceIterator iterator = new GameSequenceIterator(null);
 
     assertFalse(iterator.hasNext());
-    assertNull(iterator.getOriginalInput());
   }
 
   @Test
@@ -121,16 +119,4 @@ class GameSequenceIteratorTest {
     assertFalse(iterator.hasNext());
   }
 
-  @Test
-  @DisplayName("Devrait préserver l'input original")
-  void should_preserve_original_input() {
-    String originalInput = "AAABBBAAA";
-    GameSequenceIterator iterator = new GameSequenceIterator(originalInput);
-
-    while (iterator.hasNext()) {
-      iterator.next();
-    }
-
-    assertEquals(originalInput, iterator.getOriginalInput());
-  }
 }

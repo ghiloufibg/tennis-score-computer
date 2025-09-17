@@ -13,7 +13,6 @@ class PointTest {
   void should_create_point_for_player_A() {
     Point point = Point.from('A');
 
-    assertEquals('A', point.getWinner());
     assertTrue(point.isWonBy(Player.A));
     assertFalse(point.isWonBy(Player.B));
   }
@@ -23,7 +22,6 @@ class PointTest {
   void should_create_point_for_player_B() {
     Point point = Point.from('B');
 
-    assertEquals('B', point.getWinner());
     assertTrue(point.isWonBy(Player.B));
     assertFalse(point.isWonBy(Player.A));
   }

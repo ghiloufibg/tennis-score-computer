@@ -10,9 +10,5 @@ public abstract class TennisTestBase {
   @BeforeEach
   void setUp() {
     testEnvironment = TennisTestBuilder.createTestEnvironment();
-    onSetUp();
-  }
-
-  protected void onSetUp() {
   }
 }

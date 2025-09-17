@@ -6,20 +6,35 @@ public final class TennisGame {
 
   private final Player playerA;
   private final Player playerB;
-  private final GameState gameState;
+  private final TennisGameState gameState;
+  private final TennisScoringSystem scoringSystem;
 
-  public TennisGame(Player playerA, Player playerB, GameState gameState) {
+  public TennisGame(Player playerA, Player playerB, TennisGameState gameState) {
+    this(playerA, playerB, gameState, TennisScoringSystem.STANDARD);
+  }
+
+  public TennisGame(
+      Player playerA,
+      Player playerB,
+      TennisGameState gameState,
+      TennisScoringSystem scoringSystem) {
     this.playerA = playerA;
     this.playerB = playerB;
     this.gameState = gameState;
+    this.scoringSystem = scoringSystem;
   }
 
   public static TennisGame newGame() {
-    return new TennisGame(Player.A, Player.B, GameState.IN_PROGRESS);
+    return new TennisGame(
+        Player.A, Player.B, InProgressGameState.INSTANCE, TennisScoringSystem.STANDARD);
   }
 
   public static TennisGame withPlayers(String nameA, String nameB) {
-    return new TennisGame(Player.withName(nameA), Player.withName(nameB), GameState.IN_PROGRESS);
+    return new TennisGame(
+        Player.withName(nameA),
+        Player.withName(nameB),
+        InProgressGameState.INSTANCE,
+        TennisScoringSystem.STANDARD);
   }
 
   public TennisGame scorePoint(Point point) {
@@ -29,48 +44,19 @@ public final class TennisGame {
 
     Player newPlayerA = point.isWonBy(Player.A) ? playerA.scorePoint() : playerA;
     Player newPlayerB = point.isWonBy(Player.B) ? playerB.scorePoint() : playerB;
+    TennisGameState newGameState =
+        gameState.scorePoint(newPlayerA, newPlayerB, point, scoringSystem);
 
-    GameState newGameState = calculateGameState(newPlayerA, newPlayerB);
-
-    return new TennisGame(newPlayerA, newPlayerB, newGameState);
-  }
-
-  private GameState calculateGameState(Player playerA, Player playerB) {
-    Score scoreA = playerA.score();
-    Score scoreB = playerB.score();
-
-    int pointsA = scoreA.points();
-    int pointsB = scoreB.points();
-
-    if (pointsA >= 3 && pointsA == pointsB) {
-      return GameState.DEUCE;
-    }
-
-    if (pointsA >= 4 && pointsA == pointsB + 1) {
-      return GameState.ADVANTAGE_A;
-    }
-
-    if (pointsB >= 4 && pointsB == pointsA + 1) {
-      return GameState.ADVANTAGE_B;
-    }
-
-    if (pointsA >= 4 && pointsA >= pointsB + 2) {
-      return GameState.GAME_WON_A;
-    }
-
-    if (pointsB >= 4 && pointsB >= pointsA + 2) {
-      return GameState.GAME_WON_B;
-    }
-
-    return GameState.IN_PROGRESS;
+    return new TennisGame(newPlayerA, newPlayerB, newGameState, scoringSystem);
   }
 
   public TennisGame reset() {
-    return new TennisGame(playerA.reset(), playerB.reset(), GameState.IN_PROGRESS);
+    return new TennisGame(
+        playerA.reset(), playerB.reset(), InProgressGameState.INSTANCE, scoringSystem);
   }
 
   public boolean isGameFinished() {
-    return gameState == GameState.GAME_WON_A || gameState == GameState.GAME_WON_B;
+    return gameState.isGameFinished();
   }
 
   public Player getPlayerA() {
@@ -81,7 +67,7 @@ public final class TennisGame {
     return playerB;
   }
 
-  public GameState getGameState() {
+  public TennisGameState getGameState() {
     return gameState;
   }
 
@@ -92,12 +78,13 @@ public final class TennisGame {
     TennisGame that = (TennisGame) obj;
     return Objects.equals(playerA, that.playerA)
         && Objects.equals(playerB, that.playerB)
-        && gameState == that.gameState;
+        && gameState == that.gameState
+        && Objects.equals(scoringSystem, that.scoringSystem);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(playerA, playerB, gameState);
+    return Objects.hash(playerA, playerB, gameState, scoringSystem);
   }
 
   @Override
@@ -109,6 +96,8 @@ public final class TennisGame {
         + playerB
         + ", gameState="
         + gameState
+        + ", scoringSystem="
+        + scoringSystem
         + '}';
   }
 }

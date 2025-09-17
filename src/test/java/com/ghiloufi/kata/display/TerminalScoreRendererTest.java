@@ -2,7 +2,7 @@ package com.ghiloufi.kata.display;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.ghiloufi.kata.domain.GameState;
+import com.ghiloufi.kata.testutil.helpers.TestGameStates;
 import com.ghiloufi.kata.domain.TennisGame;
 import com.ghiloufi.kata.testutil.builders.TennisTestBuilder;
 import java.util.stream.Stream;
@@ -53,7 +53,7 @@ class TerminalScoreRendererTest {
       var playerA = TennisTestBuilder.playerWithPoints("A", pointsA);
       var playerB = TennisTestBuilder.playerWithPoints("B", pointsB);
 
-      String actualScore = renderer.apply(new TennisGame(playerA, playerB, GameState.IN_PROGRESS));
+      String actualScore = renderer.apply(new TennisGame(playerA, playerB, TestGameStates.IN_PROGRESS));
 
       assertEquals(expectedScore, actualScore);
     }
@@ -68,7 +68,7 @@ class TerminalScoreRendererTest {
     void should_format_deuce_correctly() {
       var playerA = TennisTestBuilder.playerWithPoints("A", 3);
       var playerB = TennisTestBuilder.playerWithPoints("B", 3);
-      String score = renderer.apply(new TennisGame(playerA, playerB, GameState.DEUCE));
+      String score = renderer.apply(new TennisGame(playerA, playerB, TestGameStates.DEUCE));
       assertEquals("Player A : 40 / Player B : 40 (Deuce)", score);
     }
 
@@ -77,7 +77,7 @@ class TerminalScoreRendererTest {
     void should_format_advantage_a_correctly() {
       var playerA = TennisTestBuilder.playerWithPoints("A", 4);
       var playerB = TennisTestBuilder.playerWithPoints("B", 3);
-      String score = renderer.apply(new TennisGame(playerA, playerB, GameState.ADVANTAGE_A));
+      String score = renderer.apply(new TennisGame(playerA, playerB, TestGameStates.ADVANTAGE_A));
       assertEquals("Player A : 40 / Player B : 40 (Advantage Player A)", score);
     }
 
@@ -86,7 +86,7 @@ class TerminalScoreRendererTest {
     void should_format_advantage_b_correctly() {
       var playerA = TennisTestBuilder.playerWithPoints("A", 3);
       var playerB = TennisTestBuilder.playerWithPoints("B", 4);
-      String score = renderer.apply(new TennisGame(playerA, playerB, GameState.ADVANTAGE_B));
+      String score = renderer.apply(new TennisGame(playerA, playerB, TestGameStates.ADVANTAGE_B));
       assertEquals("Player A : 40 / Player B : 40 (Advantage Player B)", score);
     }
 
@@ -95,7 +95,7 @@ class TerminalScoreRendererTest {
     void should_format_game_won_a_correctly() {
       var playerA = TennisTestBuilder.playerWithPoints("A", 4);
       var playerB = TennisTestBuilder.playerWithPoints("B", 0);
-      String score = renderer.apply(new TennisGame(playerA, playerB, GameState.GAME_WON_A));
+      String score = renderer.apply(new TennisGame(playerA, playerB, TestGameStates.GAME_WON_A));
       assertEquals("Player A wins the game", score);
     }
 
@@ -104,7 +104,7 @@ class TerminalScoreRendererTest {
     void should_format_game_won_b_correctly() {
       var playerA = TennisTestBuilder.playerWithPoints("A", 0);
       var playerB = TennisTestBuilder.playerWithPoints("B", 4);
-      String score = renderer.apply(new TennisGame(playerA, playerB, GameState.GAME_WON_B));
+      String score = renderer.apply(new TennisGame(playerA, playerB, TestGameStates.GAME_WON_B));
       assertEquals("Player B wins the game", score);
     }
   }
