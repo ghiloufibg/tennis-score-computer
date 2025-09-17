@@ -52,10 +52,10 @@ public class DataProvider {
 
   public static Stream<Arguments> invalidInputScenarios() {
     return Stream.of(
-        Arguments.of(null, "Input cannot be null"),
-        Arguments.of("", "Input cannot be empty"),
-        Arguments.of("AAXBB", "Invalid character: X at position 2. Only 'A' or 'B' are allowed."),
-        Arguments.of("AaBb", "Invalid character: a at position 1. Only 'A' or 'B' are allowed."));
+        Arguments.of(null, "Match notation cannot be null"),
+        Arguments.of("", "Match notation cannot be empty"),
+        Arguments.of("AAXBB", "Invalid player: X at position 2. Only 'A' or 'B' are allowed."),
+        Arguments.of("AaBb", "Invalid player: a at position 1. Only 'A' or 'B' are allowed."));
   }
 
   public static Stream<TennisTestCase> complexGameScenarios() {

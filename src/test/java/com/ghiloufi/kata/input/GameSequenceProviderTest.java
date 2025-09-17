@@ -58,7 +58,7 @@ class GameSequenceProviderTest {
     IllegalArgumentException exception =
         assertThrows(IllegalArgumentException.class, () -> GameSequenceProvider.fromString(null));
 
-    assertEquals("Input cannot be null", exception.getMessage());
+    assertEquals("Match notation cannot be null", exception.getMessage());
   }
 
   @Test
@@ -67,7 +67,7 @@ class GameSequenceProviderTest {
     IllegalArgumentException exception =
         assertThrows(IllegalArgumentException.class, () -> GameSequenceProvider.fromString(""));
 
-    assertEquals("Input cannot be empty", exception.getMessage());
+    assertEquals("Match notation cannot be empty", exception.getMessage());
   }
 
   @Test
@@ -78,7 +78,7 @@ class GameSequenceProviderTest {
             IllegalArgumentException.class, () -> GameSequenceProvider.fromString("AAXBB"));
 
     assertEquals(
-        "Invalid character: X at position 2. Only 'A' or 'B' are allowed.", exception.getMessage());
+        "Invalid player: X at position 2. Only 'A' or 'B' are allowed.", exception.getMessage());
   }
 
   @Test
@@ -88,7 +88,7 @@ class GameSequenceProviderTest {
         assertThrows(IllegalArgumentException.class, () -> GameSequenceProvider.fromString("AaBb"));
 
     assertEquals(
-        "Invalid character: a at position 1. Only 'A' or 'B' are allowed.", exception.getMessage());
+        "Invalid player: a at position 1. Only 'A' or 'B' are allowed.", exception.getMessage());
   }
 
   @Test
@@ -98,7 +98,7 @@ class GameSequenceProviderTest {
         assertThrows(IllegalArgumentException.class, () -> GameSequenceProvider.fromString("A1B"));
 
     assertEquals(
-        "Invalid character: 1 at position 1. Only 'A' or 'B' are allowed.", exception.getMessage());
+        "Invalid player: 1 at position 1. Only 'A' or 'B' are allowed.", exception.getMessage());
   }
 
   @Test
@@ -123,7 +123,7 @@ class GameSequenceProviderTest {
         assertThrows(
             IllegalArgumentException.class, () -> GameSequenceProvider.fromString(tooLongSequence));
 
-    assertTrue(exception.getMessage().contains("Input too long"));
+    assertTrue(exception.getMessage().contains("Match notation too long"));
     assertTrue(exception.getMessage().contains("Maximum allowed: 10000"));
   }
 
