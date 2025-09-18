@@ -2,6 +2,7 @@ package com.ghiloufi.kata.testutil.assertions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.ghiloufi.kata.domain.error.GameException;
 import com.ghiloufi.kata.testutil.builders.TennisTestBuilder;
 
 public class Assertions {
@@ -38,9 +39,9 @@ public class Assertions {
   }
 
   public static void assertInvalidInputThrows(String input, String expectedMessage) {
-    IllegalArgumentException exception =
+    GameException exception =
         assertThrows(
-            IllegalArgumentException.class,
+            GameException.class,
             () -> {
               var testEnv = TennisTestBuilder.createTestEnvironment(input);
               testEnv.playMatch();

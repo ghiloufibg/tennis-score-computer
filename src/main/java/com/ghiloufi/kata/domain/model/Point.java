@@ -1,8 +1,8 @@
 package com.ghiloufi.kata.domain.model;
 
-import static com.ghiloufi.kata.presentation.display.GameDisplayTemplates.*;
 import static com.ghiloufi.kata.domain.model.PlayerNotation.*;
 
+import com.ghiloufi.kata.domain.error.GameError;
 import java.util.Objects;
 
 public final class Point {
@@ -18,7 +18,7 @@ public final class Point {
 
   public static Point from(char winner) {
     if (!isValidPlayerChar(winner)) {
-      throw new IllegalArgumentException(String.format(INVALID_PLAYER_ERROR_TEMPLATE, winner));
+      throw GameError.INVALID_PLAYER.toException(winner);
     }
     return winner == PLAYER_A_CHAR ? PLAYER_A : PLAYER_B;
   }

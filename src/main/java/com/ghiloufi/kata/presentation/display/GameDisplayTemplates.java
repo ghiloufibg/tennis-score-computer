@@ -15,15 +15,6 @@ public final class GameDisplayTemplates {
   public static final String GAME_WON_BY_B_DISPLAY = "Player B wins the game";
   public static final String SCORE_FORMAT_TEMPLATE = "Player A : %s / Player B : %s";
 
-  public static final String INVALID_PLAYER_ERROR_TEMPLATE =
-      "Invalid player: %c. Only 'A' or 'B' are allowed.";
-  public static final String INVALID_PLAYER_AT_POSITION_ERROR_TEMPLATE =
-      "Invalid player: %c at position %d. Only 'A' or 'B' are allowed.";
-  public static final String NOTATION_NULL_ERROR = "Match notation cannot be null";
-  public static final String NOTATION_EMPTY_ERROR = "Match notation cannot be empty";
-  public static final String NOTATION_TOO_LONG_ERROR_TEMPLATE =
-      "Match notation too long: %d points. Maximum allowed: %d";
-
   public static String getAdvantageMessage(Player player) {
     return player == Player.A ? ADVANTAGE_PLAYER_A_DISPLAY : ADVANTAGE_PLAYER_B_DISPLAY;
   }

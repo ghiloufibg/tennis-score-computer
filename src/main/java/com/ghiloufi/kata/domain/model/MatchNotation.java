@@ -1,8 +1,8 @@
 package com.ghiloufi.kata.domain.model;
 
 import static com.ghiloufi.kata.domain.model.PlayerNotation.*;
-import static com.ghiloufi.kata.presentation.display.GameDisplayTemplates.*;
 
+import com.ghiloufi.kata.domain.error.GameError;
 import java.util.Objects;
 
 public final class MatchNotation {
@@ -22,28 +22,26 @@ public final class MatchNotation {
   }
 
   private static String sanitize(String notation) {
-    if (notation == null) {
-      throw new IllegalArgumentException(NOTATION_NULL_ERROR);
+    if (notation == null || notation.trim().isEmpty()) {
+      throw GameError.NOTATION_EMPTY.toException();
     }
     return notation.replaceAll("\\s+", "");
   }
 
   private static void validate(String notation) {
     if (notation.isEmpty()) {
-      throw new IllegalArgumentException(NOTATION_EMPTY_ERROR);
+      throw GameError.NOTATION_EMPTY.toException();
     }
 
     if (notation.length() > MAX_LENGTH) {
-      throw new IllegalArgumentException(
-          String.format(NOTATION_TOO_LONG_ERROR_TEMPLATE, notation.length(), MAX_LENGTH));
+      throw GameError.NOTATION_TOO_LONG.toException(notation.length(), MAX_LENGTH);
     }
 
     if (!notation.chars().allMatch(c -> isValidPlayerChar((char) c))) {
       for (int i = 0; i < notation.length(); i++) {
         char point = notation.charAt(i);
         if (!isValidPlayerChar(point)) {
-          throw new IllegalArgumentException(
-              String.format(INVALID_PLAYER_AT_POSITION_ERROR_TEMPLATE, point, i));
+          throw GameError.INVALID_PLAYER_AT_POSITION.toException(point, i);
         }
       }
     }

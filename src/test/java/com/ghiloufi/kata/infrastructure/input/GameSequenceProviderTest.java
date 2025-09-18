@@ -2,6 +2,7 @@ package com.ghiloufi.kata.infrastructure.input;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.ghiloufi.kata.domain.error.GameException;
 import com.ghiloufi.kata.domain.model.Point;
 import java.util.Iterator;
 import org.junit.jupiter.api.DisplayName;
@@ -56,27 +57,26 @@ class GameSequenceProviderTest {
   @Test
   @DisplayName("Devrait rejeter une entrée null")
   void should_reject_null_input() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> GameSequenceProvider.fromString(null));
+    GameException exception =
+        assertThrows(GameException.class, () -> GameSequenceProvider.fromString(null));
 
-    assertEquals("Match notation cannot be null", exception.getMessage());
+    assertEquals("Match notation cannot be null or empty", exception.getMessage());
   }
 
   @Test
   @DisplayName("Devrait rejeter une entrée vide")
   void should_reject_empty_input() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> GameSequenceProvider.fromString(""));
+    GameException exception =
+        assertThrows(GameException.class, () -> GameSequenceProvider.fromString(""));
 
-    assertEquals("Match notation cannot be empty", exception.getMessage());
+    assertEquals("Match notation cannot be null or empty", exception.getMessage());
   }
 
   @Test
   @DisplayName("Devrait rejeter une entrée avec des caractères invalides")
   void should_reject_input_with_invalid_characters() {
-    IllegalArgumentException exception =
-        assertThrows(
-            IllegalArgumentException.class, () -> GameSequenceProvider.fromString("AAXBB"));
+    GameException exception =
+        assertThrows(GameException.class, () -> GameSequenceProvider.fromString("AAXBB"));
 
     assertEquals(
         "Invalid player: X at position 2. Only 'A' or 'B' are allowed.", exception.getMessage());
@@ -85,8 +85,8 @@ class GameSequenceProviderTest {
   @Test
   @DisplayName("Devrait rejeter une entrée avec des lettres minuscules")
   void should_reject_input_with_lowercase_letters() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> GameSequenceProvider.fromString("AaBb"));
+    GameException exception =
+        assertThrows(GameException.class, () -> GameSequenceProvider.fromString("AaBb"));
 
     assertEquals(
         "Invalid player: a at position 1. Only 'A' or 'B' are allowed.", exception.getMessage());
@@ -95,8 +95,8 @@ class GameSequenceProviderTest {
   @Test
   @DisplayName("Devrait rejeter une entrée avec des chiffres")
   void should_reject_input_with_numbers() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> GameSequenceProvider.fromString("A1B"));
+    GameException exception =
+        assertThrows(GameException.class, () -> GameSequenceProvider.fromString("A1B"));
 
     assertEquals(
         "Invalid player: 1 at position 1. Only 'A' or 'B' are allowed.", exception.getMessage());
@@ -120,9 +120,8 @@ class GameSequenceProviderTest {
   void should_reject_sequence_too_long() {
     String tooLongSequence = "A".repeat(10001);
 
-    IllegalArgumentException exception =
-        assertThrows(
-            IllegalArgumentException.class, () -> GameSequenceProvider.fromString(tooLongSequence));
+    GameException exception =
+        assertThrows(GameException.class, () -> GameSequenceProvider.fromString(tooLongSequence));
 
     assertTrue(exception.getMessage().contains("Match notation too long"));
     assertTrue(exception.getMessage().contains("Maximum allowed: 10000"));

@@ -2,6 +2,7 @@ package com.ghiloufi.kata.domain.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.ghiloufi.kata.domain.error.GameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -39,24 +40,21 @@ class PointTest {
   @Test
   @DisplayName("Devrait rejeter un caractère invalide")
   void should_reject_invalid_character() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> Point.from('X'));
+    GameException exception = assertThrows(GameException.class, () -> Point.from('X'));
     assertEquals("Invalid player: X. Only 'A' or 'B' are allowed.", exception.getMessage());
   }
 
   @Test
   @DisplayName("Devrait rejeter les lettres minuscules")
   void should_reject_lowercase_letters() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> Point.from('a'));
+    GameException exception = assertThrows(GameException.class, () -> Point.from('a'));
     assertEquals("Invalid player: a. Only 'A' or 'B' are allowed.", exception.getMessage());
   }
 
   @Test
   @DisplayName("Devrait rejeter les chiffres")
   void should_reject_numbers() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> Point.from('1'));
+    GameException exception = assertThrows(GameException.class, () -> Point.from('1'));
     assertEquals("Invalid player: 1. Only 'A' or 'B' are allowed.", exception.getMessage());
   }
 

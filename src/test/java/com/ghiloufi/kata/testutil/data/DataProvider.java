@@ -59,7 +59,7 @@ public final class DataProvider {
 
   public static Stream<String[]> invalidInputScenarios() {
     return Stream.of(
-        new String[] {"", "Match notation cannot be empty"},
+        new String[] {"", "Match notation cannot be null or empty"},
         new String[] {"C", "Invalid player: C at position 0. Only 'A' or 'B' are allowed."},
         new String[] {"AB1", "Invalid player: 1 at position 2. Only 'A' or 'B' are allowed."});
   }

@@ -1,12 +1,10 @@
 package com.ghiloufi.kata.infrastructure.input;
 
+import com.ghiloufi.kata.application.error.TechnicalError;
 import com.ghiloufi.kata.domain.model.Point;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 class GameSequenceIterator implements Iterator<Point> {
-
-  private static final String NO_MORE_ELEMENTS_MESSAGE = "No more points available";
 
   private final String input;
   private int currentIndex;
@@ -24,7 +22,7 @@ class GameSequenceIterator implements Iterator<Point> {
   @Override
   public Point next() {
     if (!hasNext()) {
-      throw new NoSuchElementException(NO_MORE_ELEMENTS_MESSAGE);
+      throw TechnicalError.NO_MORE_ELEMENTS.toException();
     }
     return Point.from(input.charAt(currentIndex++));
   }

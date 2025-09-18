@@ -2,6 +2,7 @@ package com.ghiloufi.kata.domain.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.ghiloufi.kata.domain.error.GameException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -38,32 +39,28 @@ class MatchNotationTest {
   @Test
   @DisplayName("Devrait rejeter une notation null")
   void should_reject_null_notation() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> MatchNotation.from(null));
-    assertEquals("Match notation cannot be null", exception.getMessage());
+    GameException exception = assertThrows(GameException.class, () -> MatchNotation.from(null));
+    assertEquals("Match notation cannot be null or empty", exception.getMessage());
   }
 
   @Test
   @DisplayName("Devrait rejeter une notation vide")
   void should_reject_empty_notation() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> MatchNotation.from(""));
-    assertEquals("Match notation cannot be empty", exception.getMessage());
+    GameException exception = assertThrows(GameException.class, () -> MatchNotation.from(""));
+    assertEquals("Match notation cannot be null or empty", exception.getMessage());
   }
 
   @Test
   @DisplayName("Devrait rejeter une notation avec espaces seulement")
   void should_reject_whitespace_only_notation() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> MatchNotation.from("   "));
-    assertEquals("Match notation cannot be empty", exception.getMessage());
+    GameException exception = assertThrows(GameException.class, () -> MatchNotation.from("   "));
+    assertEquals("Match notation cannot be null or empty", exception.getMessage());
   }
 
   @Test
   @DisplayName("Devrait rejeter un caractère invalide")
   void should_reject_invalid_character() {
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> MatchNotation.from("AAX"));
+    GameException exception = assertThrows(GameException.class, () -> MatchNotation.from("AAX"));
     assertEquals(
         "Invalid player: X at position 2. Only 'A' or 'B' are allowed.", exception.getMessage());
   }
@@ -73,8 +70,8 @@ class MatchNotationTest {
   void should_reject_notation_too_long() {
     String longNotation = "A".repeat(10001);
 
-    IllegalArgumentException exception =
-        assertThrows(IllegalArgumentException.class, () -> MatchNotation.from(longNotation));
+    GameException exception =
+        assertThrows(GameException.class, () -> MatchNotation.from(longNotation));
 
     assertTrue(exception.getMessage().contains("Match notation too long"));
     assertTrue(exception.getMessage().contains("10001 points"));

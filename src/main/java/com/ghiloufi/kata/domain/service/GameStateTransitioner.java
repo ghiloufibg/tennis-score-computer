@@ -4,9 +4,9 @@ import com.ghiloufi.kata.domain.model.Player;
 import com.ghiloufi.kata.domain.model.ScoringSystem;
 import com.ghiloufi.kata.domain.state.AdvantageGameState;
 import com.ghiloufi.kata.domain.state.DeuceGameState;
+import com.ghiloufi.kata.domain.state.GameState;
 import com.ghiloufi.kata.domain.state.GameWonState;
 import com.ghiloufi.kata.domain.state.InProgressGameState;
-import com.ghiloufi.kata.domain.state.GameState;
 
 public final class GameStateTransitioner {
 

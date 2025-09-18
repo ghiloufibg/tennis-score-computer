@@ -2,8 +2,8 @@ package com.ghiloufi.kata.infrastructure.input;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.ghiloufi.kata.application.error.TechnicalException;
 import com.ghiloufi.kata.domain.model.Point;
-import java.util.NoSuchElementException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -70,7 +70,7 @@ class GameSequenceIteratorTest {
 
     iterator.next();
 
-    assertThrows(NoSuchElementException.class, iterator::next);
+    assertThrows(TechnicalException.class, iterator::next);
   }
 
   @Test
@@ -78,7 +78,7 @@ class GameSequenceIteratorTest {
   void should_throw_exception_on_empty_sequence() {
     GameSequenceIterator iterator = new GameSequenceIterator("");
 
-    assertThrows(NoSuchElementException.class, iterator::next);
+    assertThrows(TechnicalException.class, iterator::next);
   }
 
   @Test
@@ -86,7 +86,7 @@ class GameSequenceIteratorTest {
   void should_throw_exception_on_null_sequence() {
     GameSequenceIterator iterator = new GameSequenceIterator(null);
 
-    assertThrows(NoSuchElementException.class, iterator::next);
+    assertThrows(TechnicalException.class, iterator::next);
   }
 
   @Test
