@@ -1,10 +1,10 @@
 package com.ghiloufi.kata.testutil.builders;
 
-import com.ghiloufi.kata.computer.TennisScoreComputer;
-import com.ghiloufi.kata.display.ScoreboardDisplay;
-import com.ghiloufi.kata.display.TerminalScoreRenderer;
-import com.ghiloufi.kata.domain.Player;
-import com.ghiloufi.kata.input.GameSequenceProvider;
+import com.ghiloufi.kata.application.service.ScoreComputer;
+import com.ghiloufi.kata.domain.model.Player;
+import com.ghiloufi.kata.infrastructure.input.GameSequenceProvider;
+import com.ghiloufi.kata.presentation.display.ScoreboardDisplay;
+import com.ghiloufi.kata.presentation.display.TerminalScoreRenderer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -28,7 +28,7 @@ public class TennisTestBuilder {
   }
 
   public static class TestEnvironment {
-    private final TennisScoreComputer computer;
+    private final ScoreComputer computer;
     private final List<String> capturedOutput;
     private final ScoreboardDisplay display;
     private final String gameSequence;
@@ -37,7 +37,7 @@ public class TennisTestBuilder {
       this.capturedOutput = new ArrayList<>();
       Consumer<String> capturingConsumer = capturedOutput::add;
       this.display = new ScoreboardDisplay(capturingConsumer, new TerminalScoreRenderer());
-      this.computer = new TennisScoreComputer(display);
+      this.computer = new ScoreComputer(display);
       this.gameSequence = "A";
     }
 
@@ -45,16 +45,12 @@ public class TennisTestBuilder {
       this.capturedOutput = new ArrayList<>();
       Consumer<String> capturingConsumer = capturedOutput::add;
       this.display = new ScoreboardDisplay(capturingConsumer, new TerminalScoreRenderer());
-      this.computer = new TennisScoreComputer(display);
+      this.computer = new ScoreComputer(display);
       this.gameSequence = gameSequence;
     }
 
     public void playMatch() {
       computer.playMatch(GameSequenceProvider.fromString(gameSequence));
-    }
-
-    public TennisScoreComputer getComputer() {
-      return computer;
     }
 
     public List<String> getCapturedOutput() {
