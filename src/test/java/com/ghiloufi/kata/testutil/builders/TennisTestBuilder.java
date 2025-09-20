@@ -2,6 +2,7 @@ package com.ghiloufi.kata.testutil.builders;
 
 import com.ghiloufi.kata.application.service.ScoreComputer;
 import com.ghiloufi.kata.domain.model.Player;
+import com.ghiloufi.kata.domain.model.Score;
 import com.ghiloufi.kata.infrastructure.input.GameSequenceProvider;
 import com.ghiloufi.kata.presentation.display.ScoreboardDisplay;
 import com.ghiloufi.kata.presentation.display.TerminalScoreRenderer;
@@ -20,7 +21,7 @@ public class TennisTestBuilder {
   }
 
   public static Player playerWithPoints(String name, int points) {
-    Player player = Player.withName(name);
+    Player player = new Player(name, new Score(0));
     for (int i = 0; i < points; i++) {
       player = player.scorePoint();
     }

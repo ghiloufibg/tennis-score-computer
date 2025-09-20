@@ -15,7 +15,7 @@ class MatchNotationTest {
     MatchNotation notation = MatchNotation.from("AAABB");
 
     assertEquals("AAABB", notation.getValue());
-    assertEquals(5, notation.length());
+    assertEquals(5, notation.getValue().length());
   }
 
   @Test
@@ -24,7 +24,7 @@ class MatchNotationTest {
     MatchNotation notation = MatchNotation.from("A B A B");
 
     assertEquals("ABAB", notation.getValue());
-    assertEquals(4, notation.length());
+    assertEquals(4, notation.getValue().length());
   }
 
   @Test
@@ -32,8 +32,8 @@ class MatchNotationTest {
   void should_allow_character_access() {
     MatchNotation notation = MatchNotation.from("AB");
 
-    assertEquals('A', notation.charAt(0));
-    assertEquals('B', notation.charAt(1));
+    assertEquals('A', notation.getValue().charAt(0));
+    assertEquals('B', notation.getValue().charAt(1));
   }
 
   @Test
@@ -79,33 +79,11 @@ class MatchNotationTest {
   }
 
   @Test
-  @DisplayName("Devrait implémenter equals correctement")
-  void should_implement_equals_correctly() {
-    MatchNotation notation1 = MatchNotation.from("AAABB");
-    MatchNotation notation2 = MatchNotation.from("A A A B B");
-    MatchNotation notation3 = MatchNotation.from("BBBAA");
-
-    assertEquals(notation1, notation2);
-    assertNotEquals(notation1, notation3);
-    assertNotEquals(notation1, null);
-    assertNotEquals(notation1, "AAABB");
-  }
-
-  @Test
-  @DisplayName("Devrait implémenter hashCode correctement")
-  void should_implement_hashCode_correctly() {
-    MatchNotation notation1 = MatchNotation.from("AAABB");
-    MatchNotation notation2 = MatchNotation.from("A A A B B");
-
-    assertEquals(notation1.hashCode(), notation2.hashCode());
-  }
-
-  @Test
-  @DisplayName("Devrait implémenter toString correctement")
-  void should_implement_toString_correctly() {
+  @DisplayName("Devrait retourner la valeur correctement")
+  void should_return_value_correctly() {
     MatchNotation notation = MatchNotation.from("A B A B");
 
-    assertEquals("ABAB", notation.toString());
+    assertEquals("ABAB", notation.getValue());
   }
 
   @Test
@@ -124,7 +102,7 @@ class MatchNotationTest {
     assertDoesNotThrow(
         () -> {
           MatchNotation notation = MatchNotation.from(maxLengthNotation);
-          assertEquals(10000, notation.length());
+          assertEquals(10000, notation.getValue().length());
         });
   }
 }

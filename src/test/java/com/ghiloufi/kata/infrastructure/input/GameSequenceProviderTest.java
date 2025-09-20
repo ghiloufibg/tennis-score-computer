@@ -25,8 +25,8 @@ class GameSequenceProviderTest {
   void should_validate_and_create_iterator_for_simple_sequence() {
     Iterator<Point> iterator = GameSequenceProvider.fromString("AB");
 
-    assertEquals(Point.PLAYER_A, iterator.next());
-    assertEquals(Point.PLAYER_B, iterator.next());
+    assertEquals(Point.A, iterator.next());
+    assertEquals(Point.B, iterator.next());
     assertFalse(iterator.hasNext());
   }
 
@@ -35,10 +35,10 @@ class GameSequenceProviderTest {
   void should_sanitize_input_by_removing_spaces() {
     Iterator<Point> iterator = GameSequenceProvider.fromString("A B A B");
 
-    assertEquals(Point.PLAYER_A, iterator.next());
-    assertEquals(Point.PLAYER_B, iterator.next());
-    assertEquals(Point.PLAYER_A, iterator.next());
-    assertEquals(Point.PLAYER_B, iterator.next());
+    assertEquals(Point.A, iterator.next());
+    assertEquals(Point.B, iterator.next());
+    assertEquals(Point.A, iterator.next());
+    assertEquals(Point.B, iterator.next());
     assertFalse(iterator.hasNext());
   }
 
@@ -47,10 +47,10 @@ class GameSequenceProviderTest {
   void should_sanitize_input_by_removing_tabs_and_newlines() {
     Iterator<Point> iterator = GameSequenceProvider.fromString("A\tB\nA\rB");
 
-    assertEquals(Point.PLAYER_A, iterator.next());
-    assertEquals(Point.PLAYER_B, iterator.next());
-    assertEquals(Point.PLAYER_A, iterator.next());
-    assertEquals(Point.PLAYER_B, iterator.next());
+    assertEquals(Point.A, iterator.next());
+    assertEquals(Point.B, iterator.next());
+    assertEquals(Point.A, iterator.next());
+    assertEquals(Point.B, iterator.next());
     assertFalse(iterator.hasNext());
   }
 
@@ -150,10 +150,10 @@ class GameSequenceProviderTest {
     assertNotNull(iterator);
     assertTrue(iterator.hasNext());
 
-    assertEquals(Point.PLAYER_A, iterator.next());
-    assertEquals(Point.PLAYER_A, iterator.next());
-    assertEquals(Point.PLAYER_A, iterator.next());
-    assertEquals(Point.PLAYER_B, iterator.next());
+    assertEquals(Point.A, iterator.next());
+    assertEquals(Point.A, iterator.next());
+    assertEquals(Point.A, iterator.next());
+    assertEquals(Point.B, iterator.next());
   }
 
   @Test

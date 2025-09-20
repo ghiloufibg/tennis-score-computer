@@ -1,21 +1,17 @@
 package com.ghiloufi.kata.domain.model;
 
+import com.ghiloufi.kata.domain.error.GameError;
+
 public record Score(int points) {
 
-  public static Score from(int points) {
-    return new Score(points);
+  public Score {
+    if (points < 0) {
+      throw GameError.NEGATIVE_POINTS.toException(points);
+    }
   }
 
   public Score increment() {
-    return Score.from(points + 1);
-  }
-
-  public boolean isForty() {
-    return points == 3;
-  }
-
-  public boolean isAtLeastForty() {
-    return points >= 3;
+    return new Score(points + 1);
   }
 
   @Override

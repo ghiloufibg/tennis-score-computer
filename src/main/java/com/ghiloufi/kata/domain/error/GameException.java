@@ -1,15 +1,18 @@
 package com.ghiloufi.kata.domain.error;
 
-public final class GameException extends RuntimeException {
+import com.ghiloufi.kata.common.error.GameRuntimeException;
 
-  private final GameError error;
+public final class GameException extends GameRuntimeException {
 
   public GameException(GameError error, String message) {
-    super(message);
-    this.error = error;
+    super(error, message);
+  }
+
+  private GameError getErrorType() {
+    return (GameError) getRawErrorType();
   }
 
   public GameError getError() {
-    return error;
+    return getErrorType();
   }
 }

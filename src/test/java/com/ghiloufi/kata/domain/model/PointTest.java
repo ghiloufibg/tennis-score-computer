@@ -33,8 +33,8 @@ class PointTest {
     Point pointA = Point.from('A');
     Point pointB = Point.from('B');
 
-    assertSame(Point.PLAYER_A, pointA);
-    assertSame(Point.PLAYER_B, pointB);
+    assertSame(Point.A, pointA);
+    assertSame(Point.B, pointB);
   }
 
   @Test

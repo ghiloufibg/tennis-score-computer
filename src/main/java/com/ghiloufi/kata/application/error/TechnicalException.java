@@ -1,15 +1,18 @@
 package com.ghiloufi.kata.application.error;
 
-public final class TechnicalException extends RuntimeException {
+import com.ghiloufi.kata.common.error.GameRuntimeException;
 
-  private final TechnicalError error;
+public final class TechnicalException extends GameRuntimeException {
 
   public TechnicalException(TechnicalError error, String message) {
-    super(message);
-    this.error = error;
+    super(error, message);
+  }
+
+  private TechnicalError getErrorType() {
+    return (TechnicalError) getRawErrorType();
   }
 
   public TechnicalError getError() {
-    return error;
+    return getErrorType();
   }
 }

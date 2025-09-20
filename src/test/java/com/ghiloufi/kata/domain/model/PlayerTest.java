@@ -11,46 +11,46 @@ class PlayerTest {
   @Test
   @DisplayName("Devrait créer un joueur avec le nom et score initial")
   void should_create_player() {
-    Player player = Player.withName("TestPlayer");
+    Player player = new Player("TestPlayer", new Score(0));
 
     assertEquals("TestPlayer", player.name());
-    assertEquals(Score.from(0), player.score());
+    assertEquals(new Score(0), player.score());
   }
 
   @Test
   @DisplayName("Devrait marquer des points immutablement")
   void should_score_points_immutably() {
-    Player player = Player.withName("TestPlayer");
+    Player player = new Player("TestPlayer", new Score(0));
 
     Player afterFirstPoint = player.scorePoint();
-    assertEquals(Score.from(1), afterFirstPoint.score());
-    assertEquals(Score.from(0), player.score());
+    assertEquals(new Score(1), afterFirstPoint.score());
+    assertEquals(new Score(0), player.score());
 
     Player afterSecondPoint = afterFirstPoint.scorePoint();
-    assertEquals(Score.from(2), afterSecondPoint.score());
+    assertEquals(new Score(2), afterSecondPoint.score());
 
     Player afterThirdPoint = afterSecondPoint.scorePoint();
-    assertEquals(Score.from(3), afterThirdPoint.score());
+    assertEquals(new Score(3), afterThirdPoint.score());
   }
 
   @Test
   @DisplayName("Devrait remettre à zéro le score immutablement")
   void should_reset_score_immutably() {
-    Player player = Player.withName("TestPlayer").scorePoint().scorePoint();
-    assertEquals(Score.from(2), player.score());
+    Player player = new Player("TestPlayer", new Score(0)).scorePoint().scorePoint();
+    assertEquals(new Score(2), player.score());
 
     Player resetPlayer = player.reset();
-    assertEquals(Score.from(0), resetPlayer.score());
-    assertEquals(Score.from(2), player.score());
+    assertEquals(new Score(0), resetPlayer.score());
+    assertEquals(new Score(2), player.score());
   }
 
   @Test
   @DisplayName("Devrait implémenter equals correctement")
   void should_implement_equals_correctly() {
-    Player player1 = Player.withName("Alice").scorePoint();
-    Player player2 = Player.withName("Alice").scorePoint();
-    Player player3 = Player.withName("Bob").scorePoint();
-    Player player4 = Player.withName("Alice");
+    Player player1 = new Player("Alice", new Score(0)).scorePoint();
+    Player player2 = new Player("Alice", new Score(0)).scorePoint();
+    Player player3 = new Player("Bob", new Score(0)).scorePoint();
+    Player player4 = new Player("Alice", new Score(0));
 
     assertEquals(player1, player2);
     assertNotEquals(player1, player3);
