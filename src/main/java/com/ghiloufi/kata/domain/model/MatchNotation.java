@@ -32,7 +32,7 @@ public final class MatchNotation {
     sanitized
         .chars()
         .mapToObj(c -> (char) c)
-        .filter(c -> !PlayerNotation.isValidPlayerChar(c))
+        .filter(c -> !Point.isValidPlayerChar(c))
         .findFirst()
         .ifPresent(
             invalidChar -> {
@@ -45,9 +45,5 @@ public final class MatchNotation {
 
   public Stream<Point> points() {
     return value.chars().mapToObj(c -> Point.from((char) c));
-  }
-
-  public String getValue() {
-    return value;
   }
 }

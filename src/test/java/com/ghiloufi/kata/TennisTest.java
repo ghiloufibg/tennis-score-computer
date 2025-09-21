@@ -7,7 +7,6 @@ import com.ghiloufi.kata.application.service.ScoreComputer;
 import com.ghiloufi.kata.domain.error.GameException;
 import com.ghiloufi.kata.domain.model.*;
 import com.ghiloufi.kata.domain.state.GameState;
-import com.ghiloufi.kata.infrastructure.input.GameSequenceProvider;
 import com.ghiloufi.kata.presentation.display.ScoreboardDisplay;
 import com.ghiloufi.kata.presentation.display.TerminalScoreRenderer;
 import java.util.ArrayList;
@@ -156,7 +155,7 @@ class TennisTest {
   @DisplayName("Handles whitespace in match notation")
   void handles_whitespace_in_match_notation() {
     var notation = MatchNotation.from("A B A B");
-    assertEquals("ABAB", notation.getValue());
+    assertEquals(4, notation.points().count());
   }
 
   /*
@@ -198,10 +197,10 @@ class TennisTest {
     var display = new ScoreboardDisplay(results::add, new TerminalScoreRenderer());
     var computer = new ScoreComputer(display);
 
-    computer.playMatch(GameSequenceProvider.fromString("AAAA"));
+    computer.playMatch(MatchNotation.from("AAAA").points().iterator());
 
     assertFalse(results.isEmpty());
-    assertTrue(results.get(results.size() - 1).contains("wins"));
+    assertTrue(results.getLast().contains("wins"));
   }
 
   @Test
@@ -212,17 +211,17 @@ class TennisTest {
     var computer = new ScoreComputer(display);
 
     // Game ends at 4th point but we provide more
-    computer.playMatch(GameSequenceProvider.fromString("AAAAAA"));
+    computer.playMatch(MatchNotation.from("AAAAAA").points().iterator());
 
     assertFalse(results.isEmpty());
     // Should stop after game is won, not process extra points
-    assertTrue(results.get(results.size() - 1).contains("wins"));
+    assertTrue(results.getLast().contains("wins"));
   }
 
   @Test
-  @DisplayName("GameSequenceProvider creates valid iterators")
-  void game_sequence_provider_creates_valid_iterators() {
-    var iterator = GameSequenceProvider.fromString("AB");
+  @DisplayName("MatchNotation creates valid point iterators")
+  void match_notation_creates_valid_point_iterators() {
+    var iterator = MatchNotation.from("AB").points().iterator();
 
     assertTrue(iterator.hasNext());
     assertEquals(Point.from('A'), iterator.next());
