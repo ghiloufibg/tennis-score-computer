@@ -5,10 +5,6 @@ import com.ghiloufi.kata.domain.state.GameState;
 public record Game(
     Player playerA, Player playerB, GameState gameState, ScoringSystem scoringSystem) {
 
-  public Game(Player playerA, Player playerB, GameState gameState) {
-    this(playerA, playerB, gameState, ScoringSystem.STANDARD);
-  }
-
   public static Game newGame() {
     return new Game(Player.A, Player.B, GameState.PLAYING, ScoringSystem.STANDARD);
   }

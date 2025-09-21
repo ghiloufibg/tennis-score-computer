@@ -11,22 +11,22 @@ import java.util.Iterator;
 public class ScoreComputer {
 
   private final ScoreboardDisplay scoreboardDisplay;
-  private Game tennisGame;
+  private final Game game;
 
   public ScoreComputer(final ScoreboardDisplay scoreboardDisplay) {
     this.scoreboardDisplay = Require.nonNull(scoreboardDisplay, NULL_SCOREBOARD_DISPLAY);
-    this.tennisGame = Game.newGame();
+    this.game = Game.newGame();
   }
 
   public void playMatch(Iterator<Point> gameSequence) {
     Require.nonNull(gameSequence, NULL_GAME_SEQUENCE);
 
-    tennisGame = tennisGame.reset();
+    Game currentGame = game.reset();
 
-    while (gameSequence.hasNext() && !tennisGame.isGameFinished()) {
+    while (gameSequence.hasNext() && !currentGame.isGameFinished()) {
       final Point point = gameSequence.next();
-      tennisGame = tennisGame.scorePoint(point);
-      scoreboardDisplay.displayScore(tennisGame);
+      currentGame = currentGame.scorePoint(point);
+      scoreboardDisplay.displayScore(currentGame);
     }
   }
 }
